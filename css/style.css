@@ -301,6 +301,14 @@ body.welcome #auth:hover {
   max-width: 100%;
   box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, 0.7);
 }
+.photo-list .photo-item .likes {
+  font-size: 0.7em;
+  color: #333333;
+  float: right;
+}
+.photo-list .photo-item .likes:hover {
+  text-decoration: underline;
+}
 
 .popular-page {
   margin: 40px 0 0;

@@ -34,6 +34,7 @@
   <ul class="photo-list" ng-controller="GetProfilePhotos">
     <li class="photo-item" ng-repeat="photo in userPhotos">
       <img class="fancybox" href="{{photo.images.standard_resolution.url}}" src="" ng-src="{{photo.images.low_resolution.url}}" title="{{photo.caption.text}}" />
+      <span class="likes" ng-click="like(photo)">Likes: {{photo.likes.count}}</span>
     </li>
   </ul>
 

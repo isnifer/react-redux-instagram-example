@@ -64,6 +64,37 @@ var myApp = angular
         });
     };
 
+    $scope.like = function(picture){
+
+      // Check if user liked this photo
+      if (picture.user_has_liked){
+        var action = 'DELETE';
+      } else {
+        action = 'POST'
+      }
+
+      // Make current type request
+      $http({
+        method: 'GET',
+        params: {
+          "access_token": $scope.token,
+          "photoId": picture.id,
+          "action": action
+        },
+        url: '../php/like.php'
+      })
+        .success(function(){
+          // Change counter depending on request type
+          if(action === 'POST'){
+            picture.user_has_liked = true;
+            picture.likes.count = picture.likes.count + 1;
+          } else {
+            picture.user_has_liked = false;
+            picture.likes.count = picture.likes.count - 1;
+          }
+        });
+    };
+
   })
   // Get Popular
   .controller('Search', function($scope, $http, $window){
@@ -100,37 +131,6 @@ var myApp = angular
         $scope.timeline = $scope.pictures.data;
         console.log($scope.timeline);
       });
-
-    $scope.like = function(picture){
-
-      // Check if user liked this photo
-      if (picture.user_has_liked){
-        var action = 'DELETE';
-      } else {
-        action = 'POST'
-      }
-
-      // Make current type request
-      $http({
-        method: 'GET',
-        params: {
-          "access_token": $scope.token,
-          "photoId": picture.id,
-          "action": action
-        },
-        url: '../php/like.php'
-      })
-        .success(function(){
-          // Change counter depending on request type
-          if(action === 'POST'){
-            picture.user_has_liked = true;
-            picture.likes.count = picture.likes.count + 1;
-          } else {
-            picture.user_has_liked = false;
-            picture.likes.count = picture.likes.count - 1;
-          }
-        });
-    };
 
     $scope.comment = function(photoId, commentText){
       $http({
