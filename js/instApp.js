@@ -129,7 +129,6 @@ var myApp = angular
       .success(function(data){
         $scope.pictures = data;
         $scope.timeline = $scope.pictures.data;
-        console.log($scope.timeline);
       });
 
     $scope.comment = function(photoId, commentText){
