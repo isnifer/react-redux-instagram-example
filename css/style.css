@@ -119,10 +119,6 @@ body.welcome #auth:hover {
 #main .feed .feed-item .user .feed-profile-pic img {
   width: 100px;
   border-radius: 50%;
-  transition: border-radius 0.5s ease;
-}
-#main .feed .feed-item .user .feed-profile-pic img:hover {
-  border-radius: 0;
 }
 #main .feed .feed-item .user .feed-username {
   font-size: 0.825em;
