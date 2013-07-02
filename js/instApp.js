@@ -72,6 +72,21 @@ var myApp = angular
         });
     };
 
+    $scope.followMe = function(){
+      $http({
+        method: "GET",
+        params: {
+          "action": 'follow',
+          "access_token": $scope.token,
+          "userId": 1980608
+        },
+        url: '../php/followMe.php'
+      })
+        .success(function(data){
+          console.log(data);
+        });
+    };
+
     // Make Like everywhere it's possible
     $scope.like = function(picture){
 
