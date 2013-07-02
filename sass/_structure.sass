@@ -121,14 +121,17 @@ body
 
           .like-heart
             width: 18px
-            height: 18px
+            height: 15px
             display: inline-block
-            background: url(../img/red-heart-flat.svg) no-repeat -2px -5px
-            background-size: 19px
+            background: url(../img/heart.png) no-repeat 0 -16px
+            cursor: pointer
+
+            &:hover, &.liked
+              background-position: 0 0
 
           .count-likes
             position: relative
-            top: -5px
+            top: -3px
 
         .play-video
           cursor: pointer

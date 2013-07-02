@@ -138,14 +138,17 @@ body.welcome #auth:hover {
 }
 #main .feed .feed-item .user .feed-likes .like-heart {
   width: 18px;
-  height: 18px;
+  height: 15px;
   display: inline-block;
-  background: url(../img/red-heart-flat.svg) no-repeat -2px -5px;
-  background-size: 19px;
+  background: url(../img/heart.png) no-repeat 0 -16px;
+  cursor: pointer;
+}
+#main .feed .feed-item .user .feed-likes .like-heart:hover, #main .feed .feed-item .user .feed-likes .like-heart.liked {
+  background-position: 0 0;
 }
 #main .feed .feed-item .user .feed-likes .count-likes {
   position: relative;
-  top: -5px;
+  top: -3px;
 }
 #main .feed .feed-item .user .play-video {
   cursor: pointer;

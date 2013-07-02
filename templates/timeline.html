@@ -10,7 +10,15 @@
           </a>
           <span class="feed-username">{{picture.user.username}}</span>
           <span class="feed-likes">
-            <i class="like-heart"></i> <span class="count-likes">{{picture.likes.count || 0}}</span>
+            <span ng-switch="picture.user_has_liked">
+              <span ng-switch-when="true">
+                <i class="like-heart liked" ng-click="like(picture)"></i>
+              </span>
+              <span ng-switch-default>
+                <i class="like-heart" ng-click="like(picture)"></i>
+              </span>
+            </span>
+            <span class="count-likes">{{picture.likes.count || 0}}</span>
           </span>
           <div ng-switch="picture.type">
             <div ng-switch-when="video">
@@ -22,12 +30,12 @@
         <div class="photo">
           <div ng-switch="picture.type">
             <div ng-switch-when="video">
-              <video class="feed-pic" id="{{picture.id}}" ng-dblclick="like(picture.id)" controls autoload>
+              <video class="feed-pic" id="{{picture.id}}" ng-dblclick="like(picture)" controls autoload>
                 <source src="{{picture.videos.standard_resolution.url}}" />
               </video>
             </div>
             <div ng-switch-default>
-              <img class="feed-pic" id="{{picture.id}}" ng-dblclick="like(picture.id)" src="" ng-src="{{picture.images.standard_resolution.url}}" />
+              <img class="feed-pic" id="{{picture.id}}" ng-dblclick="like(picture)" src="" ng-src="{{picture.images.standard_resolution.url}}" />
             </div>
           </div>
           <div ng-switch="picture.comments.count">
