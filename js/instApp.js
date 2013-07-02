@@ -1,7 +1,7 @@
 var myApp = angular
   .module('instApp', [])
   .config(function ($routeProvider){
-    // Настроим маршруты
+    // Make routes
     $routeProvider
       // Search
       .when('/search/', {
@@ -49,24 +49,33 @@ var myApp = angular
         $scope.user = data.data;
       });
 
-    $scope.followUnfollow = function(action, userId){
-      $http({
+    // Change Relationship status
+    $scope.relationship = function(user){
+
+      if (user.status.outgoing_status === 'none'){
+        var action = 'follow';
+      } else {
+        action = 'unfollow';
+      }
+
+        $http({
         method: "GET",
         params: {
           "action": action,
           "access_token": $scope.token,
-          "userId": userId
+          "userId": user.id
         },
         url: '../php/followMe.php'
       })
         .success(function(data){
-          console.log(data);
+          user.status = data.data;
         });
     };
 
+    // Make Like everywhere it's possible
     $scope.like = function(picture){
 
-      // Check if user liked this photo
+      // Check if user liked current photo
       if (picture.user_has_liked){
         var action = 'DELETE';
       } else {
@@ -116,6 +125,7 @@ var myApp = angular
         });
     };
 
+    // Remove all spaces in hashtag
     $scope.$watch('hashtag', function() {
       $scope.hashtag = $scope.hashtag.replace(/\s+/g,'');
     });
@@ -131,6 +141,7 @@ var myApp = angular
         $scope.timeline = $scope.pictures.data;
       });
 
+    // This feature depends on Instagram Developers
     $scope.comment = function(photoId, commentText){
       $http({
         method: "GET",
@@ -157,9 +168,10 @@ var myApp = angular
       .success(function(data){
         $scope.followersData = data;
         $scope.followers = data.data;
+        myApp.addStatus($scope, $http);
       });
 
-    myApp.loadOnScroll($scope, $http, 'followersData', 'followers');
+    myApp.loadOnScroll($scope, $http, 'followersData', 'followers', myApp.addStatus);
 
   })
   // Load List of Followees (Я читаю)
@@ -170,9 +182,10 @@ var myApp = angular
       .success(function(data){
         $scope.followersData = data;
         $scope.followers = data.data;
+        myApp.addStatus($scope, $http);
       });
 
-    myApp.loadOnScroll($scope, $http, 'followersData', 'followers');
+    myApp.loadOnScroll($scope, $http, 'followersData', 'followers', myApp.addStatus);
 
   })
   // Load Photos on Profile Page
@@ -193,7 +206,7 @@ var myApp = angular
 
   });
 
-myApp.loadOnScroll = function($scope, $http, photoData, photos){
+myApp.loadOnScroll = function($scope, $http, photoData, photos, addStatus){
   var lastScrollTop = 0;
   window.addEventListener('scroll', function(e){
     var body = document.body,
@@ -206,9 +219,22 @@ myApp.loadOnScroll = function($scope, $http, photoData, photos){
           .success(function(data){
             $scope[photoData] = data;
             $scope[photos] = $scope[photos].concat($scope[photoData].data);
+            addStatus($scope[photos]);
+            console.log($scope[photos]);
           });
       }
     }
     lastScrollTop = scrollTop;
   });
+};
+
+// Add status to global followers array
+myApp.addStatus = function($scope, $http){
+  angular.forEach($scope.followers, function(value, key){
+    $http
+      .jsonp('https://api.instagram.com/v1/users/' + $scope.followers[key]["id"] + '/relationship?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
+      .success(function(data){
+        $scope.followers[key].status = data.data;
+      })
+  })
 };

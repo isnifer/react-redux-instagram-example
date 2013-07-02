@@ -370,11 +370,17 @@ body.welcome #auth:hover {
   list-style: none;
 }
 .foll-page .foll-list .foll-item {
-  display: inline-block;
   float: left;
-  width: 20.5%;
+  width: 100%;
+  height: 100px;
   vertical-align: top;
-  margin: 0 6% 5% 0;
+  margin: 0;
+  background: white;
+  border-bottom: 1px solid #17b287;
+  border-right: 1px solid #17b287;
+}
+.foll-page .foll-list .foll-item:first-child {
+  border-top: 1px solid #17b287;
 }
 .foll-page .foll-list .foll-item:nth-child(4n) {
   margin-right: 0;
@@ -382,19 +388,37 @@ body.welcome #auth:hover {
 .foll-page .foll-list .foll-item a {
   text-decoration: none;
   color: #333333;
-  font: normal 16px "Roboto Condensed";
+  font: bold 1.25em "Roboto Condensed";
   text-align: center;
-  display: block;
 }
 .foll-page .foll-list .foll-item a .foll-avatar {
-  display: block;
-  width: 100%;
+  display: inline-block;
+  width: 99px;
+  float: left;
+  margin-right: 10px;
 }
-.foll-page .foll-list .foll-item a:hover .foll-username {
+.foll-page .foll-list .foll-item a .foll-username {
   -webkit-transition: color 0.5s ease;
   -moz-transition: color 0.5s ease;
   -ms-transition: color 0.5s ease;
   -o-transition: color 0.5s ease;
   transition: color 0.5s ease;
+  overflow: hidden;
+  position: relative;
+  top: 35px;
+}
+.foll-page .foll-list .foll-item a .foll-username:hover {
   color: #ff4c4b;
+}
+.foll-page .foll-list .unread-btn, .foll-page .foll-list .read-btn {
+  border: 0;
+  padding: 3px 10px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.5);
+  background: #ff4c4b;
+  color: white;
+  float: right;
+  margin: 10px 10px 0 0;
+}
+.foll-page .foll-list .read-btn {
+  background: #27ae60;
 }

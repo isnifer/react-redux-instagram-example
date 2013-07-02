@@ -6,7 +6,6 @@
   $data = array('access_token' => $token, 'action' => $action);
   $url = 'https://api.instagram.com/v1/users/'. $userId .'/relationship?';
 
-  // use key 'http' even if you send the request to https://...
   $options = array(
       'http' => array(
           'header'  => "Content-type: application/x-www-form-urlencoded\r\n",

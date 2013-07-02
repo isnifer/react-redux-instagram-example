@@ -12,6 +12,14 @@
              ng-src="{{follower.profile_picture}}" />
         <span class="foll-username">{{follower.username}}</span>
       </a>
+      <div ng-switch="follower.status.outgoing_status">
+        <div ng-switch-when="none">
+          <button class="read-btn" ng-click="relationship(follower)">Follow</button>
+        </div>
+        <div ng-switch-default>
+          <button class="unread-btn" ng-click="relationship(follower)">Unfollow</button>
+        </div>
+      </div>
     </li>
   </ul>
 
