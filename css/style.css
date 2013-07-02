@@ -1,0 +1,389 @@
+@import url(http://webfonts.ru/import/roboto.css);
+@import url(fonts/grand.css);
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.clf:after {
+  display: block;
+  clear: both;
+  content: "";
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: #bdc3c7;
+  font-size: 16px;
+}
+body.welcome {
+  background: url(../img/blur.jpg) no-repeat 0 0;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -ms-background-size: cover;
+  background-size: cover;
+}
+body.welcome #auth {
+  display: block;
+  width: 200px;
+  height: 29px;
+  background: url(../img/auth.png) no-repeat 0 0;
+  text-indent: -9999px;
+  outline: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -100px;
+}
+body.welcome #auth:hover {
+  background: url(../img/auth_h.png) no-repeat 0 0;
+}
+
+#container {
+  max-width: 940px;
+  min-height: 100%;
+  position: relative;
+  margin: 0 auto;
+}
+
+#header {
+  width: 100%;
+  height: 50px;
+  background: #17b287;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+#header .main-menu {
+  margin: 0;
+  padding: 14px 0 0;
+  list-style: none;
+  text-align: center;
+}
+#header .main-menu .main-item {
+  display: inline-block;
+  margin-right: 15px;
+}
+#header .main-menu .main-item:last-child {
+  margin-right: 0;
+}
+#header .main-menu .main-link {
+  text-decoration: none;
+  color: #17b287;
+  background: #f9f9f9;
+  font: normal 1em "Roboto Condensed";
+  padding: 5px 20px;
+  -webkit-transition: color 0.5s ease;
+  -moz-transition: color 0.5s ease;
+  -ms-transition: color 0.5s ease;
+  -o-transition: color 0.5s ease;
+  transition: color 0.5s ease;
+}
+#header .main-menu .main-link:hover {
+  color: #ff4c4b;
+}
+
+#main {
+  width: 98%;
+  margin: 0 auto;
+  padding: 40px 0 115px 0;
+}
+#main .feed {
+  margin: 2% auto 0;
+  padding: 0;
+  width: 95%;
+  list-style: none;
+}
+#main .feed .feed-item {
+  display: block;
+  width: 76%;
+  min-height: 400px;
+  margin: 40px auto 0;
+}
+#main .feed .feed-item .user {
+  float: left;
+  margin-right: 10px;
+}
+#main .feed .feed-item .user .feed-profile-pic {
+  display: block;
+  width: 100px;
+  height: 100px;
+}
+#main .feed .feed-item .user .feed-profile-pic img {
+  width: 100px;
+  border-radius: 50%;
+  transition: border-radius 0.5s ease;
+}
+#main .feed .feed-item .user .feed-profile-pic img:hover {
+  border-radius: 0;
+}
+#main .feed .feed-item .user .feed-username {
+  font-size: 0.825em;
+  color: #222222;
+  font-weight: 700;
+  display: block;
+  text-align: center;
+}
+#main .feed .feed-item .user .feed-likes {
+  display: block;
+  text-align: center;
+  font-size: 0.75em;
+  margin-top: 3px;
+}
+#main .feed .feed-item .user .feed-likes .like-heart {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background: url(../img/red-heart-flat.svg) no-repeat -2px -5px;
+  background-size: 19px;
+}
+#main .feed .feed-item .user .feed-likes .count-likes {
+  position: relative;
+  top: -5px;
+}
+#main .feed .feed-item .user .play-video {
+  cursor: pointer;
+}
+#main .feed .feed-item .photo {
+  overflow: hidden;
+}
+#main .feed .feed-item .photo .feed-pic {
+  max-width: 100%;
+  width: 500px;
+  display: block;
+}
+#main .feed .feed-item .photo .comments {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+#main .feed .feed-item .photo .comments .feed-comment {
+  display: block;
+  margin: 0 0 5px 0;
+}
+#main .feed .feed-item .photo .comments .feed-comment .comment-pic {
+  width: 20px;
+  margin-right: 5px;
+  float: left;
+}
+#main .feed .feed-item .photo .comments .feed-comment .comment-username {
+  font-size: 0.85em;
+  font-weight: bold;
+  color: #444444;
+  text-decoration: none;
+}
+#main .feed .feed-item .photo .comments .feed-comment .comment-username:hover {
+  border-bottom: 1px dashed #444444;
+}
+#main .feed .feed-item .photo .comments .feed-comment .comment-text {
+  font-size: 0.85em;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 89px;
+  background: #444444;
+  border-top: 1px solid #4f4f50;
+  border-bottom: 1px solid #4f4f50;
+}
+#footer .social-list {
+  float: left;
+  margin: 32px 0 0 60px;
+  padding: 0;
+  list-style: none;
+}
+#footer .social-list .social-item {
+  display: inline-block;
+  float: left;
+  margin-left: 15px;
+}
+#footer .social-list .social-item:first-child {
+  margin-left: 0;
+}
+#footer .social-list .social-link {
+  color: #dddbdb;
+  font: normal 24px "Arial", Tahoma, Verdana;
+  text-decoration: none;
+  -webkit-transition: color 0.4s ease;
+  -moz-transition: color 0.4s ease;
+  -ms-transition: color 0.4s ease;
+  -o-transition: color 0.4s ease;
+  transition: color 0.4s ease;
+}
+#footer .social-list .social-link:hover {
+  color: #27ae60;
+}
+#footer .copyright {
+  float: right;
+  color: #dddbdb;
+  font: normal 0.75em "Tahoma", Arial, Verdana;
+  margin: 38px 60px 0 0;
+}
+
+.profile-page {
+  margin: 40px 0 0;
+}
+.profile-page .main-info .photo {
+  display: block;
+  margin: 0 auto;
+  width: 150px;
+  height: 150px;
+}
+.profile-page .main-info .username {
+  color: white;
+  text-shadow: 0 1px 2px #333333;
+  text-align: center;
+  line-height: 20px;
+  margin: 10px 0 0;
+  font: bold 2em "Roboto Condensed";
+}
+.profile-page .main-info .stats, .profile-page .main-info .info {
+  margin: 20px 0 30px;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+.profile-page .main-info .stats li, .profile-page .main-info .info li {
+  display: inline-block;
+  text-align: center;
+  padding: 0 20px;
+  font: normal 1.25em "Roboto Condensed";
+  color: white;
+  text-shadow: 0 1px 1px #333333;
+}
+.profile-page .main-info .stats li a, .profile-page .main-info .info li a {
+  text-decoration: none;
+  color: white;
+  text-shadow: 0 1px 1px #333333;
+  -webkit-transition: color 0.5s ease;
+  -moz-transition: color 0.5s ease;
+  -ms-transition: color 0.5s ease;
+  -o-transition: color 0.5s ease;
+  transition: color 0.5s ease;
+}
+.profile-page .main-info .stats li a:hover, .profile-page .main-info .info li a:hover {
+  color: #17b287;
+}
+.profile-page .main-info .info li {
+  color: #333333;
+  text-shadow: none;
+  display: block;
+  text-align: center;
+}
+
+.photo-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.photo-list .photo-item {
+  display: inline-block;
+  width: 20.5%;
+  margin: 0 6% 6% 0;
+  cursor: pointer;
+}
+.photo-list .photo-item:nth-child(4n) {
+  margin-right: 0;
+}
+.photo-list .photo-item img {
+  max-width: 100%;
+  box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, 0.7);
+}
+
+.popular-page {
+  margin: 40px 0 0;
+}
+.popular-page .search-photos {
+  width: 100%;
+  height: 60px;
+  margin: 0 auto 30px;
+}
+.popular-page .search-photos .search {
+  display: inline-block;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  font: normal 24px "Roboto Condensed";
+  color: #bdbab4;
+  outline: none;
+  border: 0;
+  padding: 0 14px;
+}
+
+.about-page {
+  text-align: center;
+  padding-top: 40px;
+}
+.about-page header {
+  color: white;
+  text-shadow: 0 1px 1px #333333;
+  font: bold 2em "Roboto Condensed", Arial, Tahoma;
+}
+.about-page p {
+  color: #333333;
+  text-shadow: 0 1px 1px white;
+}
+.about-page p a {
+  text-decoration: none;
+  color: #333333;
+  border-bottom: 1px dashed #27ae60;
+  -webkit-transition: border-color 0.5s ease;
+  -moz-transition: border-color 0.5s ease;
+  -ms-transition: border-color 0.5s ease;
+  -o-transition: border-color 0.5s ease;
+  transition: border-color 0.5s ease;
+}
+.about-page p a:hover {
+  border-color: #ff4c4b;
+}
+
+.foll-page header {
+  color: white;
+  text-shadow: 0 1px 1px #333333;
+  font: bold 2em "Roboto Condensed", Arial, Tahoma;
+  margin: 0;
+  text-align: center;
+}
+.foll-page .foll-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.foll-page .foll-list .foll-item {
+  display: inline-block;
+  float: left;
+  width: 20.5%;
+  vertical-align: top;
+  margin: 0 6% 5% 0;
+}
+.foll-page .foll-list .foll-item:nth-child(4n) {
+  margin-right: 0;
+}
+.foll-page .foll-list .foll-item a {
+  text-decoration: none;
+  color: #333333;
+  font: normal 16px "Roboto Condensed";
+  text-align: center;
+  display: block;
+}
+.foll-page .foll-list .foll-item a .foll-avatar {
+  display: block;
+  width: 100%;
+}
+.foll-page .foll-list .foll-item a:hover .foll-username {
+  -webkit-transition: color 0.5s ease;
+  -moz-transition: color 0.5s ease;
+  -ms-transition: color 0.5s ease;
+  -o-transition: color 0.5s ease;
+  transition: color 0.5s ease;
+  color: #ff4c4b;
+}

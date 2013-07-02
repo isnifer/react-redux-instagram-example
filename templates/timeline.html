@@ -1,0 +1,58 @@
+<div id="home-page" class="pages">
+
+  <div class="timeline-bg">
+    <ul class="feed">
+
+      <li class="feed-item" ng-repeat="picture in timeline">
+        <div class="user">
+          <a href="#/profile/{{picture.user.id}}" class="feed-profile-pic">
+            <img src="" ng-src="{{picture.user.profile_picture}}">
+          </a>
+          <span class="feed-username">{{picture.user.username}}</span>
+          <span class="feed-likes">
+            <i class="like-heart"></i> <span class="count-likes">{{picture.likes.count || 0}}</span>
+          </span>
+          <div ng-switch="picture.type">
+            <div ng-switch-when="video">
+              <img class="play-video" src="../img/video-play.png" data-play="{{picture.id}}" onclick="document.getElementById(this.getAttribute('data-play')).play()" />
+            </div>
+            <div ng-switch-default></div>
+          </div>
+        </div>
+        <div class="photo">
+          <div ng-switch="picture.type">
+            <div ng-switch-when="video">
+              <video class="feed-pic" id="{{picture.id}}" ng-dblclick="like(picture.id)" controls autoload>
+                <source src="{{picture.videos.standard_resolution.url}}" />
+              </video>
+            </div>
+            <div ng-switch-default>
+              <img class="feed-pic" id="{{picture.id}}" ng-dblclick="like(picture.id)" src="" ng-src="{{picture.images.standard_resolution.url}}" />
+            </div>
+          </div>
+          <div ng-switch="picture.comments.count">
+            <div ng-switch-when="0"></div>
+            <div ng-switch-default>
+              <ul class="comments">
+                <li class="feed-comment" ng-repeat="comment in picture.comments.data">
+                  <img src="" class="comment-pic" ng-src="{{comment.from.profile_picture}}">
+                  <a href="#/profile/{{comment.from.id}}" class="comment-username">{{comment.from.username}}</a>:
+                  <span class="comment-text">
+                    {{comment.text}}
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <form ng-submit="comment(picture.id, commentText)" class="write-comment">
+          <input type="text" placeholder="Write your comment" ng-model="commentText" />
+          <button type="submit">Send comment</button>
+        </form>
+      </li>
+
+    </ul>
+  </div>
+
+
+</div>

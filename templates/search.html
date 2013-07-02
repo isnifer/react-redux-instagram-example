@@ -1,0 +1,17 @@
+<div class="popular-page">
+
+  <form class="search-photos" ng-submit="search()">
+    <input type="text" class="search" ng-model="hashtag" placeholder="Search photo by Hashtag"/>
+  </form>
+
+  <ul class="photo-list">
+    <li ng-repeat="photo in searchTimeline" class="photo-item">
+      <img class="fancybox" src=""
+           ng-src="{{photo.images.standard_resolution.url}}"
+           href="{{photo.images.standard_resolution.url}}"
+           title="{{photo.caption.text}}" />
+    </li>
+  </ul>
+
+
+</div>
