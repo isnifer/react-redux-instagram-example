@@ -219,7 +219,7 @@ myApp.loadOnScroll = function($scope, $http, photoData, photos, addStatus){
           .success(function(data){
             $scope[photoData] = data;
             $scope[photos] = $scope[photos].concat($scope[photoData].data);
-            addStatus($scope[photos]);
+            addStatus($scope, $http);
             console.log($scope[photos]);
           });
       }
