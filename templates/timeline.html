@@ -1,66 +1,63 @@
-<div id="home-page" class="pages">
+<!-- Timeline -->
+<div class="timeline">
 
-  <div class="timeline-bg">
+
     <ul class="feed">
 
-      <li class="feed-item" ng-repeat="picture in timeline">
-        <div class="user">
-          <a href="#/profile/{{picture.user.id}}" class="feed-profile-pic">
-            <img src="" ng-src="{{picture.user.profile_picture}}">
-          </a>
-          <span class="feed-username">{{picture.user.username}}</span>
-          <span class="feed-likes">
-            <span ng-switch="picture.user_has_liked">
-              <span ng-switch-when="true">
-                <i class="like-heart liked" ng-click="like(picture)"></i>
-              </span>
-              <span ng-switch-default>
-                <i class="like-heart" ng-click="like(picture)"></i>
-              </span>
-            </span>
-            <span class="count-likes">{{picture.likes.count || 0}}</span>
-          </span>
-          <div ng-switch="picture.type">
-            <div ng-switch-when="video">
-              <img class="play-video" src="../img/video-play.png" data-play="{{picture.id}}" onclick="document.getElementById(this.getAttribute('data-play')).play()" />
+        <li class="feed__item" ng-repeat="picture in timeline">
+            
+            <div class="user">
+                <a href="#/profile/{{picture.user.id}}" class="user__pic">
+                    <img src="" ng-src="{{picture.user.profile_picture}}">
+                </a>
+                <span class="user__name">{{picture.user.username}}</span>
+                <span class="user__likes">
+                    <span ng-switch="picture.user_has_liked">
+                        <span ng-switch-when="true">
+                            <i class="user__like user__like_liked" ng-click="like(picture)"></i>
+                        </span>
+                        <span ng-switch-default>
+                            <i class="user__like" ng-click="like(picture)"></i>
+                        </span>
+                    </span>
+                    <span class="user__likes-count">{{picture.likes.count || 0}}</span>
+                </span>
+                <div ng-switch="picture.type">
+                    <div ng-switch-when="video">
+                        <i class="user__video" data-play="{{picture.id}}" onclick="document.getElementById(this.getAttribute('data-play')).play()"></i>
+                    </div>
+                    <div ng-switch-default></div>
+                </div>
             </div>
-            <div ng-switch-default></div>
-          </div>
-        </div>
-        <div class="photo">
-          <div ng-switch="picture.type">
-            <div ng-switch-when="video">
-              <video class="feed-pic" id="{{picture.id}}" ng-dblclick="like(picture)" controls autoload>
-                <source src="{{picture.videos.standard_resolution.url}}" />
-              </video>
+        
+            <div class="photo">
+                <div ng-switch="picture.type">
+                    <div ng-switch-when="video">
+                        <video class="photo__pic" id="{{picture.id}}" ng-dblclick="like(picture)" controls>
+                            <source ng-src="{{picture.videos.standard_resolution.url}}" src=""></source>
+                        </video>
+                    </div>
+                    <div ng-switch-default>
+                        <img class="photo__pic" id="{{picture.id}}" ng-dblclick="like(picture)" src="" ng-src="{{picture.images.standard_resolution.url}}" />
+                    </div>
+                </div>
+                <div ng-switch="picture.comments.count">
+                    <div ng-switch-when="0"></div>
+                    <div ng-switch-default>
+                        <ul class="comments">
+                            <li class="comments__item" ng-repeat="comment in picture.comments.data">
+                                <img src="" class="comments__pic" ng-src="{{comment.from.profile_picture}}">
+                                <a class="comments__username" href="#/profile/{{comment.from.id}}">{{comment.from.username}}</a>:
+                                <span class="comments__text">{{comment.text}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div ng-switch-default>
-              <img class="feed-pic" id="{{picture.id}}" ng-dblclick="like(picture)" src="" ng-src="{{picture.images.standard_resolution.url}}" />
-            </div>
-          </div>
-          <div ng-switch="picture.comments.count">
-            <div ng-switch-when="0"></div>
-            <div ng-switch-default>
-              <ul class="comments">
-                <li class="feed-comment" ng-repeat="comment in picture.comments.data">
-                  <img src="" class="comment-pic" ng-src="{{comment.from.profile_picture}}">
-                  <a href="#/profile/{{comment.from.id}}" class="comment-username">{{comment.from.username}}</a>:
-                  <span class="comment-text">
-                    {{comment.text}}
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <!--<form ng-submit="comment(picture.id, commentText)" class="write-comment">
-          <input type="text" placeholder="Write your comment" ng-model="commentText" />
-          <button type="submit">Send comment</button>
-        </form>-->
-      </li>
+
+        </li>
 
     </ul>
-  </div>
 
 
 </div>

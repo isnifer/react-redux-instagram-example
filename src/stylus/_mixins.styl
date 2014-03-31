@@ -1,0 +1,27 @@
+box-shadow(arguments...)
+  -webkit-box-shadow arguments
+  -moz-box-shadow arguments
+  box-shadow arguments
+
+gradient(arguments...)
+  background -moz-linear-gradient(top, arguments)
+  background -webkit-linear-gradient(top, arguments)
+  background linear-gradient(to bottom, arguments)
+
+grid(ratio)
+  width (100/12) * unit(ratio, '%')
+
+offset(ratio)
+  margin-left (100/12) * unit(ratio, '%')
+
+setColumn(name, columns)
+  
+  for num in (1..columns)
+    &_{name}-{num}
+      grid num
+
+createOffset(name, columns)
+
+  for num in (1..columns)
+    &__offset_{name}-{num}
+      offset num

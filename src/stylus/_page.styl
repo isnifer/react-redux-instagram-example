@@ -1,0 +1,34 @@
+/* Обвязка */
+html, body
+  height 100%
+  font normal 16px "PT Sans", Verdana, Tahoma
+
+body
+  background #bdc3c7
+  
+  &.welcome
+    background url(../img/page/blur.jpg) no-repeat 0 0
+    -webkit-background-size cover
+    -moz-background-size cover
+    -ms-background-size cover
+    background-size cover
+
+  .auth
+    display block
+    width 200px
+    height 29px
+    background url(../img/page/auth.png) no-repeat 0 0
+    text-indent -9999px
+    outline none
+    position absolute
+    top 50%
+    left 50%
+    margin-left -100px
+
+    &:hover
+      background url(../img/page/auth_h.png) no-repeat 0 0
+
+.page
+  position relative
+  min-height 100%
+  margin 0 auto

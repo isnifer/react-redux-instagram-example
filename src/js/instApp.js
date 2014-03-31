@@ -1,5 +1,5 @@
 var myApp = angular
-  .module('instApp', [])
+  .module('instApp', ['ngRoute'])
   .config(function ($routeProvider){
     // Make routes
     $routeProvider
@@ -59,14 +59,14 @@ var myApp = angular
       }
 
         $http({
-        method: "GET",
-        params: {
-          "action": action,
-          "access_token": $scope.token,
-          "userId": user.id
-        },
-        url: '../php/followMe.php'
-      })
+          method: "GET",
+          params: {
+            "action": action,
+            "access_token": $scope.token,
+            "userId": user.id
+          },
+          url: '../php/followMe.php'
+        })
         .success(function(data){
           user.status = data.data;
         });
@@ -154,6 +154,7 @@ var myApp = angular
       .success(function(data){
         $scope.pictures = data;
         $scope.timeline = $scope.pictures.data;
+        console.log($scope.timeline);
       });
 
     // This feature depends on Instagram Developers
@@ -254,3 +255,11 @@ myApp.addStatus = function($scope, $http){
       })
   })
 };
+
+myApp.config(function($sceDelegateProvider) {
+  $sceDelegateProvider.resourceUrlWhitelist([
+    // Allow same origin resource loads.
+    'self',
+    // Allow loading from our assets domain.  Notice the difference between * and **.
+    'http://*.s3.amazonaws.com/**']);
+  });

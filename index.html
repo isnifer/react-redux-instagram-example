@@ -1,26 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Instagram App by iSnifer</title>
-  <link rel="stylesheet" href="css/normalize.css"/>
-  <link rel="stylesheet" href="css/style.css"/>
-  <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Instagram App by iSnifer</title>
+    <meta name="description" content="Instagram App by iSnifer"/>
+    <meta name="keywords" content="Instagram, photos, likes, cats, girls"/>
+    <link rel="stylesheet" href="assets/css/style.min.css"/>
+    <script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
 </head>
 <body class="welcome">
 
-  <a href="#" id="auth">Authorize</a>
+    <span href="#" class="auth" id="auth">Authorize</span>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-  $('#auth').on('click', function(e){
-    e.preventDefault();
-    var redirectUri = 'http://insta.app/auth.html'; // Change to your REDIRECT URI
-    var clientId = '7cc73a7b070d4cb0b74b71d47addbdba'; // Change to your CLIENT ID
-    window.location.href = 'https://instagram.com/oauth/authorize/?client_id=' + clientId + '&redirect_uri=' + redirectUri + '&response_type=token&code&scope=likes+comments+relationships';
-  });
+        $('#auth').on('click', function(e){
+            e.preventDefault();
+            var redirectUri = 'http://insta.app/auth.html'; // Change to your REDIRECT URI
+            var clientId = '7cc73a7b070d4cb0b74b71d47addbdba'; // Change to your CLIENT ID
+            window.location.href = 'https://instagram.com/oauth/authorize/?client_id=' + clientId + '&redirect_uri=' + redirectUri + '&response_type=token&code&scope=likes+comments+relationships';
+        });
 
-</script>
+    </script>
 
 </body>
 </html>

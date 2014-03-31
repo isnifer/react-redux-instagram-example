@@ -1,0 +1,46 @@
+.user
+  float left
+  margin-right 10px
+
+  &__pic
+    display block
+    width 100px
+    height 100px
+
+    img
+      width 100px
+      border-radius 50%
+
+  &__name
+    font-size 0.825em
+    color #222222
+    font-weight 700
+    display block
+    text-align center
+
+  &__likes
+    display block
+    text-align center
+    font-size 0.75em
+    margin-top 3px
+
+  &__like
+    width 18px
+    height 15px
+    display inline-block
+    background url(../img/user/heart.png) no-repeat 0 -16px
+    cursor pointer
+
+    &:hover, &_liked
+      background-position 0 0
+
+  &__likes-count
+    position relative
+    top -3px
+
+  &__video
+    cursor pointer
+    display block
+    width 100px
+    height 100px
+    background url(../img/user/video-play.png)

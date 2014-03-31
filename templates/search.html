@@ -1,17 +1,19 @@
-<div class="popular-page">
+<!-- Search & Popular -->
+<div class="search">
 
-  <form class="search-photos" ng-submit="search()">
-    <input type="text" class="search" ng-model="hashtag" placeholder="Search photo by Hashtag"/>
-  </form>
+    <!-- Search form -->
+    <form class="search__form" ng-submit="search()">
+        <input type="text" class="search__input" ng-model="hashtag" placeholder="Search photo by Hashtag"/>
+    </form>
 
-  <ul class="photo-list">
-    <li ng-repeat="photo in searchTimeline" class="photo-item">
-      <img class="fancybox" src=""
-           ng-src="{{photo.images.standard_resolution.url}}"
-           href="{{photo.images.standard_resolution.url}}"
-           title="{{photo.caption.text}}" />
-    </li>
-  </ul>
-
+    <!-- Results -->
+    <ul class="photo-list">
+        <li class="photo-list__item" ng-repeat="photo in searchTimeline">
+            <img class="fancybox" src=""
+                ng-src="{{photo.images.standard_resolution.url}}"
+                href="{{photo.images.standard_resolution.url}}"
+                title="{{photo.caption.text}}" />
+        </li>
+    </ul>
 
 </div>

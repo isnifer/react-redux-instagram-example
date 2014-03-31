@@ -1,26 +1,31 @@
-<div class="foll-page">
+<!-- Followers Page -->
+<div class="follow">
+    
+    <!-- Followers Header -->
+    <header class="follow__header">Followers</header>
 
-  <header class="header">
-    <h4>Followers</h4>
-  </header>
-
-  <ul class="foll-list">
-    <li class="foll-item" ng-repeat="follower in followers">
-      <a href="#/profile/{{follower.id}}">
-        <img class="foll-avatar" data-url="{{follower.id}}"
-             src="" alt=""
-             ng-src="{{follower.profile_picture}}" />
-        <span class="foll-username">@{{follower.username}}</span>
-      </a>
-      <div ng-switch="follower.status.outgoing_status">
-        <div ng-switch-when="none">
-          <button class="read-btn" ng-click="relationship(follower)">Follow</button>
-        </div>
-        <div ng-switch-default>
-          <button class="unread-btn" ng-click="relationship(follower)">Unfollow</button>
-        </div>
-      </div>
-    </li>
-  </ul>
+    <!-- Followers' list -->
+    <ul class="follow__list">
+        <li class="follow__item" ng-repeat="follower in followers">
+            <a href="#/profile/{{follower.id}}">
+                <img class="follow__avatar" data-url="{{follower.id}}"
+                    src="" alt=""
+                    ng-src="{{follower.profile_picture}}" />
+                <span class="follow__username">@{{follower.username}}</span>
+            </a>
+            <div ng-switch="follower.status.outgoing_status">
+                <div ng-switch-when="none">
+                    <button class="follow__btn follow__btn_read" ng-click="relationship(follower)">
+                        Follow
+                    </button>
+                </div>
+                <div ng-switch-default>
+                    <button class="follow__btn follow__btn_unread" ng-click="relationship(follower)">
+                        Unfollow
+                    </button>
+                </div>
+            </div>
+        </li>
+    </ul>
 
 </div>

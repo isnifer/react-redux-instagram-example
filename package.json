@@ -1,0 +1,22 @@
+{
+  "name": "GulpBoilerplate",
+  "version": "0.0.1",
+  "main": "gulpfile.js",
+  "author": "isnifer",
+  "description": "Gulp Boilerplate",
+  "homepage": "http://isnifer.me",
+  "license": "MIT",
+  "repository": { 
+    "type": "git", 
+    "url": "https://github.com/iSnifer/grunt-boilerplate.git"
+  },
+  "devDependencies": {
+    "gulp": "~3.5.6",
+    "gulp-stylus": "~0.1.0",
+    "gulp-uglify": "~0.2.1",
+    "gulp-csscomb": "~0.1.0",
+    "gulp-csso": "~0.2.6",
+    "gulp-rename": "~1.2.0",
+    "gulp-livereload": "~1.2.0"
+  }
+}

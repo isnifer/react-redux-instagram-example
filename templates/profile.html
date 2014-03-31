@@ -1,41 +1,53 @@
-<div class="profile-page">
+<!-- Profile Page -->
+<div class="profile">
 
-  <div class="main-info">
-    <div class="photo">
-      <img src="" ng-src="{{user.profile_picture}}" alt="{{user.username}}" id="profile_picture"/>
+    <div class="profile__data">
+    
+        <!-- Profile photo -->
+        <div class="profile__photo">
+            <img src="" ng-src="{{user.profile_picture}}" alt="{{user.username}}" class="profile__picture"/>
+        </div>
+
+        <!-- Profile name -->
+        <h4 class="profile__username">{{user.username}}</h4>
+
+        <!-- Profile stats -->
+        <ul class="profile__stats">
+            <li class="profile__item">
+                <span class="profile__count">Photos</span><br>
+                <span class="profile__media-digits">{{user.counts.media}}</span>
+            </li>
+            <li class="profile__item">
+                <a href="#/profile/{{user.id}}/followers/">
+                    <span class="profile__count">Followers</span><br>
+                    <span class="profile__followed_by-digits">{{user.counts.followed_by}}</span>
+                </a>
+            </li>
+            <li class="profile__item">
+                <a href="#/profile/{{user.id}}/follows/">
+                    <span class="profile__count">Follow</span><br>
+                    <span class="profile__follows-digits">{{user.counts.follows}}</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Profile info -->
+        <ul class="profile__info">
+            <li class="profile__item">{{user.full_name}}</li>
+            <li class="profile__item">{{user.bio}}</li>
+            <li class="profile__item">
+                <a href="{{user.website}}" target="_blank" class="profile__url">{{user.website}}</a>
+            </li>
+        </ul>
+
     </div>
-    <h4 class="username">{{user.username}}</h4>
-    <ul class="stats">
-      <li class="media">
-        <span class="count">Photos</span><br>
-        <span class="media-digits">{{user.counts.media}}</span>
-      </li>
-      <li class="followers">
-        <a href="#/profile/{{user.id}}/followers/">
-          <span class="count">Followers</span><br>
-          <span class="followed_by-digits">{{user.counts.followed_by}}</span>
-        </a>
-      </li>
-      <li class="you-follow">
-        <a href="#/profile/{{user.id}}/follows/">
-          <span class="count">Follow</span><br>
-          <span class="follows-digits">{{user.counts.follows}}</span>
-        </a>
-      </li>
+  
+    <!-- Profile photos -->
+    <ul class="photo-list" ng-controller="GetProfilePhotos">
+        <li class="photo-list__item" ng-repeat="photo in userPhotos">
+            <img class="fancybox" href="{{photo.images.standard_resolution.url}}" src="" ng-src="{{photo.images.low_resolution.url}}" title="{{photo.caption.text}}" />
+            <span class="photo-list__likes" ng-click="like(photo)">Likes: {{photo.likes.count}}</span>
+        </li>
     </ul>
-    <ul class="info">
-      <li class="full_name">{{user.full_name}}</li>
-      <li class="bio">{{user.bio}}</li>
-      <li class="website">
-        <a href="{{user.website}}" target="_blank" id="url">{{user.website}}</a>
-      </li>
-    </ul>
-  </div>
-  <ul class="photo-list" ng-controller="GetProfilePhotos">
-    <li class="photo-item" ng-repeat="photo in userPhotos">
-      <img class="fancybox" href="{{photo.images.standard_resolution.url}}" src="" ng-src="{{photo.images.low_resolution.url}}" title="{{photo.caption.text}}" />
-      <span class="likes" ng-click="like(photo)">Likes: {{photo.likes.count}}</span>
-    </li>
-  </ul>
 
 </div>

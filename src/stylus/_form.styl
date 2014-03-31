@@ -1,0 +1,46 @@
+.form
+  position relative
+  width 605px
+
+  &__field
+    margin 0
+    padding 0
+    border 0
+
+  &__label
+    display block
+    padding 5px 0
+
+  &__label-title
+    display inline-block
+    width 200px
+    vertical-align top
+
+  &__input, &__select, &__textarea
+    width 400px
+    font-size (14/16)*1em
+    outline none
+    border 1px solid #a0a0a0
+
+  &__input
+    height 30px
+
+  &__input, &__textarea
+    padding 0 5px
+    
+    &:focus
+      box-shadow 0 0 2px 2px rgb(255, 229, 0)
+
+  &__select
+    width 200px
+
+  &__textarea
+    padding 3px 5px
+    resize vertical
+  
+  &__answer
+    display inline-block
+    width 400px
+  
+  &__radio-wrapper
+    display block
