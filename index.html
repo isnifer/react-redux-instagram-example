@@ -6,20 +6,22 @@
     <meta name="description" content="Instagram App by iSnifer"/>
     <meta name="keywords" content="Instagram, photos, likes, cats, girls"/>
     <link rel="stylesheet" href="assets/css/style.min.css"/>
-    <script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
 </head>
 <body class="welcome">
 
-    <span href="#" class="auth" id="auth">Authorize</span>
+    <span class="auth">Authorize</span>
 
     <script type="text/javascript">
 
-        $('#auth').on('click', function(e){
-            e.preventDefault();
+        var link = document.querySelector('.auth');
+
+        function redirectToAuth() {
             var redirectUri = 'http://insta.app/auth.html'; // Change to your REDIRECT URI
             var clientId = '7cc73a7b070d4cb0b74b71d47addbdba'; // Change to your CLIENT ID
             window.location.href = 'https://instagram.com/oauth/authorize/?client_id=' + clientId + '&redirect_uri=' + redirectUri + '&response_type=token&code&scope=likes+comments+relationships';
-        });
+        }
+
+        link.addEventListener('click', redirectToAuth, false);
 
     </script>
 

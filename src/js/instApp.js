@@ -82,9 +82,7 @@ var myApp = angular
         },
         url: '../php/followMe.php'
       })
-        .success(function(data){
-          console.log(data);
-        });
+        .success(function(){});
     };
 
     // Make Like everywhere it's possible
@@ -142,7 +140,9 @@ var myApp = angular
 
     // Remove all spaces in hashtag
     $scope.$watch('hashtag', function() {
-      $scope.hashtag = $scope.hashtag.replace(/\s+/g,'');
+      if ($scope.hashtag) {
+        $scope.hashtag = $scope.hashtag.replace(/\s+/g,'');
+      }
     });
 
   })
@@ -154,7 +154,6 @@ var myApp = angular
       .success(function(data){
         $scope.pictures = data;
         $scope.timeline = $scope.pictures.data;
-        console.log($scope.timeline);
       });
 
     // This feature depends on Instagram Developers

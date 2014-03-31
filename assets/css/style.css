@@ -283,6 +283,7 @@ body .auth
     height: 29px;
     margin-left: -100px;
 
+    cursor: pointer;
     text-indent: -9999px;
 
     outline: none;

@@ -1,20 +1,18 @@
 <!doctype html>
-<html lang="en-US">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Auth Instagram</title>
+    <meta charset="UTF-8">
+    <title>Auth Instagram</title>
 </head>
 <body>
 
 <script type="text/javascript">
-
-  var loc = window.location.href;
-  var token = loc.substring(loc.indexOf('=') + 1, loc.length);
-  var userId = token.substring(0, token.indexOf('.'));
-  localStorage.setItem('accessToken', token);
-  localStorage.setItem('userId', userId);
-  window.location.href = 'app';
-
+    var loc = window.location.href;
+    var token = loc.substring(loc.indexOf('=') + 1, loc.length);
+    var userId = token.substring(0, token.indexOf('.'));
+    localStorage.setItem('accessToken', token);
+    localStorage.setItem('userId', userId);
+    window.location.href = 'app';
 </script>
 
 </body>
