@@ -1,6 +1,6 @@
-var myApp = angular
-  .module('instApp', ['ngRoute'])
-  .config(function ($routeProvider){
+var myApp = angular.module('instApp', ['ngRoute']);
+  
+myApp.config(function ($routeProvider){
     // Make routes
     $routeProvider
       // Search
@@ -21,7 +21,7 @@ var myApp = angular
       // Get Follows
       .when('/profile/:id/follows/', {
         templateUrl: '../templates/follows.html',
-        controller: 'follows'
+        controller: 'Follows'
       })
       // Timeline
       .when('/', {
@@ -33,8 +33,9 @@ var myApp = angular
         templateUrl: '../templates/about.html'
       });
   })
-  // Load Profile
-  .controller('Profile', function($scope, $http, $routeParams){
+
+// Load Profile
+myApp.controller('Profile', function($scope, $http, $routeParams){
 
     $scope.token = localStorage.getItem('accessToken');
     $scope.userId = localStorage.getItem('userId');
@@ -87,24 +88,25 @@ var myApp = angular
 
     // Make Like everywhere it's possible
     $scope.like = function(picture){
+      var action;
 
       // Check if user liked current photo
       if (picture.user_has_liked){
-        var action = 'DELETE';
+        action = 'DELETE';
       } else {
         action = 'POST'
       }
 
       // Make current type request
       $http({
-        method: 'GET',
-        params: {
-          "access_token": $scope.token,
-          "photoId": picture.id,
-          "action": action
-        },
-        url: '../php/like.php'
-      })
+          method: 'GET',
+          params: {
+            "access_token": $scope.token,
+            "photoId": picture.id,
+            "action": action
+          },
+          url: '../php/like.php'
+        })
         .success(function(){
           // Change counter depending on request type
           if(action === 'POST'){
@@ -118,8 +120,9 @@ var myApp = angular
     };
 
   })
-  // Get Popular
-  .controller('Search', function($scope, $http, $window){
+
+// Search
+myApp.controller('Search', function($scope, $http){
 
     $http
       .jsonp('https://api.instagram.com/v1/media/popular/?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
@@ -146,8 +149,9 @@ var myApp = angular
     });
 
   })
-  // Timeline Load
-  .controller('Timeline', function($scope, $http){
+  
+// Timeline Load
+myApp.controller('Timeline', function($scope, $http){
 
     $http
       .jsonp('https://api.instagram.com/v1/users/self/feed?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
@@ -156,27 +160,12 @@ var myApp = angular
         $scope.timeline = $scope.pictures.data;
       });
 
-    // This feature depends on Instagram Developers
-    $scope.comment = function(photoId, commentText){
-      $http({
-        method: "GET",
-        params: {
-          "access_token": $scope.token,
-          "photoId": photoId,
-          "text": commentText
-        },
-        url: '../php/comment.php'
-      })
-        .success(function(data){
-          console.log(data);
-        });
-    };
-
     myApp.loadOnScroll($scope, $http, 'pictures', 'timeline');
 
   })
-  // Load List of Followers (Читатели)
-  .controller('Followers', function($scope, $http, $routeParams){
+
+// Load List of Followers (Читатели)
+myApp.controller('Followers', function($scope, $http, $routeParams){
 
     $http
       .jsonp('https://api.instagram.com/v1/users/' + $routeParams.id + '/' + 'followed-by' + '?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
@@ -190,7 +179,7 @@ var myApp = angular
 
   })
   // Load List of Followees (Я читаю)
-  .controller('follows', function($scope, $http, $routeParams){
+  .controller('Follows', function($scope, $http, $routeParams){
 
     $http
       .jsonp('https://api.instagram.com/v1/users/' + $routeParams.id + '/' + 'follows' + '?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
@@ -203,8 +192,9 @@ var myApp = angular
     myApp.loadOnScroll($scope, $http, 'followersData', 'followers', myApp.addStatus);
 
   })
-  // Load Photos on Profile Page
-  .controller('GetProfilePhotos', function($scope, $http, $routeParams){
+
+// Load Photos on Profile Page
+myApp.controller('GetProfilePhotos', function($scope, $http, $routeParams){
 
     if (!$routeParams.id){
       $routeParams.id = $scope.userId;
@@ -219,13 +209,13 @@ var myApp = angular
 
     myApp.loadOnScroll($scope, $http, 'userPhotoData', 'userPhotos');
 
-  });
+});
 
 myApp.loadOnScroll = function($scope, $http, photoData, photos, addStatus){
   var lastScrollTop = 0;
   window.addEventListener('scroll', function(e){
     var body = document.body,
-      scrollTop = body.scrollTop;
+        scrollTop = body.scrollTop;
 
     if (scrollTop > lastScrollTop) {
       if (scrollTop >= (body.scrollHeight - window.innerHeight - 50)) {
@@ -256,9 +246,5 @@ myApp.addStatus = function($scope, $http){
 };
 
 myApp.config(function($sceDelegateProvider) {
-  $sceDelegateProvider.resourceUrlWhitelist([
-    // Allow same origin resource loads.
-    'self',
-    // Allow loading from our assets domain.  Notice the difference between * and **.
-    'http://*.s3.amazonaws.com/**']);
-  });
+  $sceDelegateProvider.resourceUrlWhitelist(['self','http://*.s3.amazonaws.com/**']);
+});
