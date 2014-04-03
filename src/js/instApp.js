@@ -35,20 +35,16 @@ myApp.config(function ($routeProvider) {
 });
 
 // Load Profile
-myApp.controller('Profile', function($scope, $http, $routeParams){
+myApp.controller('Profile', function($scope, $resource, $http, $routeParams){
 
     $scope.token = localStorage.getItem('accessToken');
     $scope.userId = localStorage.getItem('userId');
 
-    if (!$routeParams.id){
-      $routeParams.id = $scope.userId;
-    }
+    var user = $resource('https://api.instagram.com/v1/users/:id?access_token=:token&callback=JSON_CALLBACK', {id: '@id', token: '@token'}, {getUserData: {method: 'jsonp'}});
 
-    $http
-      .jsonp('https://api.instagram.com/v1/users/' + $routeParams.id + '?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
-      .success(function(data){
-        $scope.user = data.data;
-      });
+    $scope.Userdata = user.getUserData({id: $routeParams.id || $scope.userId, token: $scope.token}, function () {
+        $scope.user = $scope.Userdata.data;
+    });
 
     // Change Relationship status
     $scope.relationship = function(user){
@@ -132,9 +128,7 @@ myApp.controller('Search', function($scope, $resource){
     }); 
 
     // Get Search results
-    var search = $resource('https://api.instagram.com/v1/tags/:hashtag/media/recent?&access_token=:token&callback=JSON_CALLBACK', 
-      {hashtag: '@hashtag', token: '@token'}, 
-      {find: {method: 'jsonp'}});
+    var search = $resource('https://api.instagram.com/v1/tags/:hashtag/media/recent?&access_token=:token&callback=JSON_CALLBACK', {hashtag: '@hashtag', token: '@token'}, {find: {method: 'jsonp'}});
 
     $scope.search = function () {
         var searchResponse = search.find({hashtag: $scope.hashtag, token: $scope.token}, function () {
@@ -152,83 +146,77 @@ myApp.controller('Search', function($scope, $resource){
 });
   
 // Timeline Load
-myApp.controller('Timeline', function($scope, $http, $resource){
+myApp.controller('Timeline', function($scope, $resource){
 
     var timeline = $resource('https://api.instagram.com/v1/users/self/feed?access_token=:token&callback=JSON_CALLBACK', {token: '@token'}, {getTimeline: {method: 'jsonp'}});
 
-    var timelineData = timeline.getTimeline({token: $scope.token}, function () {
-        $scope.timeline = timelineData.data;
+    $scope.timelineData = timeline.getTimeline({token: $scope.token}, function () {
+        $scope.timeline = $scope.timelineData.data;
     });
 
-    loadOnScroll($scope, $http, 'pictures', 'timeline');
+    loadOnScroll($scope, $resource, 'timelineData', 'timeline');
 
 });
 
 // Load List of Followers (Читатели)
-myApp.controller('Followers', function($scope, $http, $routeParams){
+myApp.controller('Followers', function($scope, $resource, $routeParams){
 
-    $http
-      .jsonp('https://api.instagram.com/v1/users/' + $routeParams.id + '/' + 'followed-by' + '?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
-      .success(function(data){
-        $scope.followersData = data;
-        $scope.followers = data.data;
+    var followers = $resource('https://api.instagram.com/v1/users/:id/followed-by?access_token=:token&callback=JSON_CALLBACK', {id: '@id', token: '@id'}, {getAuthors: {method: 'jsonp'}});
+
+    $scope.followersData = followees.getAuthors({id: $routeParams.id, token: $scope.token}, function () {
+        $scope.followers = $scope.followersData.data;
         myApp.addStatus($scope, $http);
-      });
+    });
 
-    myApp.loadOnScroll($scope, $http, 'followersData', 'followers', myApp.addStatus);
+    loadOnScroll($scope, $resource, 'followersData', 'followers', myApp.addStatus);
 
 });
 
 // Load List of Followees (Я читаю)
-myApp.controller('Follows', function($scope, $http, $routeParams){
+myApp.controller('Follows', function($scope, $resource, $routeParams){
 
-    $http
-      .jsonp('https://api.instagram.com/v1/users/' + $routeParams.id + '/' + 'follows' + '?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
-      .success(function(data){
-        $scope.followersData = data;
-        $scope.followers = data.data;
+    var followees = $resource('https://api.instagram.com/v1/users/:id/follows?access_token=:token&callback=JSON_CALLBACK', {id: '@id', token: '@id'}, {getAuthors: {method: 'jsonp'}});
+
+    $scope.followersData = followees.getAuthors({id: $routeParams.id, token: $scope.token}, function () {
+        $scope.followers = $scope.followersData.data;
         myApp.addStatus($scope, $http);
-      });
+    });
 
-    loadOnScroll($scope, $http, 'followersData', 'followers', myApp.addStatus);
+    loadOnScroll($scope, $resource, 'followersData', 'followers', myApp.addStatus);
 
 });
 
 // Load Photos on Profile Page
-myApp.controller('GetProfilePhotos', function($scope, $http, $routeParams){
+myApp.controller('GetProfilePhotos', function($scope, $resource, $routeParams){
 
-    if (!$routeParams.id){
-      $routeParams.id = $scope.userId;
-    }
+    var profile = $resource('https://api.instagram.com/v1/users/:id/media/recent?access_token=:token&callback=JSON_CALLBACK', {id: '@id', token: '@token'}, {getPhotos: {method: 'jsonp'}});
 
-    $http
-      .jsonp('https://api.instagram.com/v1/users/' + $routeParams.id + '/media/recent?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
-      .success(function(data){
-        $scope.userPhotoData = data;
-        $scope.userPhotos = $scope.userPhotoData.data;
-      });
+    $scope.profilePhotos = profile.getPhotos({id: $routeParams.id || $scope.userId, token: $scope.token}, function () {
+        $scope.userPhotos = $scope.profilePhotos.data;
+    });
 
-    myApp.loadOnScroll($scope, $http, 'userPhotoData', 'userPhotos');
+    loadOnScroll($scope, $resource, 'profilePhotos', 'userPhotos');
 
 });
 
-function loadOnScroll ($scope, $http, photoData, photos, addStatus){
-  var lastScrollTop = 0;
+function loadOnScroll ($scope, $resource, photoData, photos, addStatus){
+  var lastScrollTop = 0,
+      body = document.body,
+      data;
+  
   window.addEventListener('scroll', function(e){
-    var body = document.body,
-        scrollTop = body.scrollTop;
+    var scrollTop = window.pageYOffset;
 
     if (scrollTop > lastScrollTop) {
       if (scrollTop >= (body.scrollHeight - window.innerHeight - 50)) {
-        $http
-          .jsonp($scope[photoData].pagination.next_url + '&callback=JSON_CALLBACK')
-          .success(function(data){
-            $scope[photoData] = data;
+        data = $resource($scope[photoData].pagination.next_url + '&callback=JSON_CALLBACK', {}, {getPhotos: {method: 'jsonp'}});
+
+        $scope[photoData] = data.getPhotos(function () {            
             $scope[photos] = $scope[photos].concat($scope[photoData].data);
-            if (addStatus){
+            if (addStatus) {
               addStatus($scope, $http);
             }
-          });
+        });
       }
     }
     lastScrollTop = scrollTop;

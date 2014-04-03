@@ -8,10 +8,10 @@
     <ul class="follow__list">
         <li class="follow__item" ng-repeat="follower in followers">
             <a href="#/profile/{{follower.id}}">
-                <img class="foll-avatar" data-url="{{follower.id}}"
+                <img class="follow__avatar" data-url="{{follower.id}}"
                     src="" alt=""
                     ng-src="{{follower.profile_picture}}" />
-                <span class="foll-username">{{follower.username}}</span>
+                <span class="follow__username">{{follower.username}}</span>
             </a>
             <div ng-switch="follower.status.outgoing_status">
                 <div ng-switch-when="none">
