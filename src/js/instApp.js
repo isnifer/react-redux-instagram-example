@@ -50,17 +50,10 @@ myApp.controller('Profile', function($scope, $resource, $http, $routeParams){
     $scope.relationship = function(user){
         var action = (user.status.outgoing_status === 'none') ? 'follow' : 'unfollow';
 
-        $http({
-          method: "GET",
-          params: {
-            "action": action,
-            "access_token": $scope.token,
-            "userId": user.id
-          },
-          url: '../php/followMe.php'
-        })
-        .success(function(data){
-          user.status = data.data;
+        var relationship = $resource('../php/followMe.php', {action: '@action', access_token: '@token', userId: '@id'});
+
+        var relationStatus = relationship.get({'action': action, 'access_token': $scope.token, 'userId': user.id}, function () {
+            user.status = relationStatus.data;  
         });
     };
 
