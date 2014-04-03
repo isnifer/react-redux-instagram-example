@@ -1,6 +1,6 @@
-var myApp = angular.module('instApp', ['ngRoute']);
+var myApp = angular.module('instApp', ['ngRoute', 'ngResource']);
   
-myApp.config(function ($routeProvider){
+myApp.config(function ($routeProvider) {
     // Make routes
     $routeProvider
       // Search
@@ -32,7 +32,7 @@ myApp.config(function ($routeProvider){
       .when('/about/', {
         templateUrl: '../templates/about.html'
       });
-  })
+});
 
 // Load Profile
 myApp.controller('Profile', function($scope, $http, $routeParams){
@@ -119,26 +119,27 @@ myApp.controller('Profile', function($scope, $http, $routeParams){
         });
     };
 
-  })
+});
 
 // Search
-myApp.controller('Search', function($scope, $http){
+myApp.controller('Search', function($scope, $resource){
 
-    $http
-      .jsonp('https://api.instagram.com/v1/media/popular/?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
-      .success(function(data){
-        $scope.searchPhotos = data;
-        $scope.searchTimeline = $scope.searchPhotos.data;
+    // Get Popular
+    var popular = $resource('https://api.instagram.com/v1/media/popular/?access_token=:token&callback=JSON_CALLBACK', {token: '@token'}, {getPopular: {method: 'jsonp'}});
+    
+    var popularResponse = popular.getPopular({token: $scope.token}, function () {
+        $scope.searchTimeline = popularResponse.data;
+    }); 
+
+    // Get Search results
+    var search = $resource('https://api.instagram.com/v1/tags/:hashtag/media/recent?&access_token=:token&callback=JSON_CALLBACK', 
+      {hashtag: '@hashtag', token: '@token'}, 
+      {find: {method: 'jsonp'}});
+
+    $scope.search = function () {
+        var searchResponse = search.find({hashtag: $scope.hashtag, token: $scope.token}, function () {
+          $scope.searchTimeline = searchResponse.data;  
       });
-
-    // Search Photo by Hashtag
-    $scope.search = function(){
-      $http
-        .jsonp('https://api.instagram.com/v1/tags/' + $scope.hashtag + '/media/recent?&access_token=' + $scope.token + '&callback=JSON_CALLBACK')
-        .success(function(data){
-          $scope.searchPhotos = data;
-          $scope.searchTimeline = $scope.searchPhotos.data;
-        });
     };
 
     // Remove all spaces in hashtag
@@ -148,21 +149,20 @@ myApp.controller('Search', function($scope, $http){
       }
     });
 
-  })
+});
   
 // Timeline Load
-myApp.controller('Timeline', function($scope, $http){
+myApp.controller('Timeline', function($scope, $http, $resource){
 
-    $http
-      .jsonp('https://api.instagram.com/v1/users/self/feed?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
-      .success(function(data){
-        $scope.pictures = data;
-        $scope.timeline = $scope.pictures.data;
-      });
+    var timeline = $resource('https://api.instagram.com/v1/users/self/feed?access_token=:token&callback=JSON_CALLBACK', {token: '@token'}, {getTimeline: {method: 'jsonp'}});
 
-    myApp.loadOnScroll($scope, $http, 'pictures', 'timeline');
+    var timelineData = timeline.getTimeline({token: $scope.token}, function () {
+        $scope.timeline = timelineData.data;
+    });
 
-  })
+    loadOnScroll($scope, $http, 'pictures', 'timeline');
+
+});
 
 // Load List of Followers (Читатели)
 myApp.controller('Followers', function($scope, $http, $routeParams){
@@ -177,9 +177,10 @@ myApp.controller('Followers', function($scope, $http, $routeParams){
 
     myApp.loadOnScroll($scope, $http, 'followersData', 'followers', myApp.addStatus);
 
-  })
-  // Load List of Followees (Я читаю)
-  .controller('Follows', function($scope, $http, $routeParams){
+});
+
+// Load List of Followees (Я читаю)
+myApp.controller('Follows', function($scope, $http, $routeParams){
 
     $http
       .jsonp('https://api.instagram.com/v1/users/' + $routeParams.id + '/' + 'follows' + '?access_token=' + $scope.token + '&callback=JSON_CALLBACK')
@@ -189,9 +190,9 @@ myApp.controller('Followers', function($scope, $http, $routeParams){
         myApp.addStatus($scope, $http);
       });
 
-    myApp.loadOnScroll($scope, $http, 'followersData', 'followers', myApp.addStatus);
+    loadOnScroll($scope, $http, 'followersData', 'followers', myApp.addStatus);
 
-  })
+});
 
 // Load Photos on Profile Page
 myApp.controller('GetProfilePhotos', function($scope, $http, $routeParams){
@@ -211,7 +212,7 @@ myApp.controller('GetProfilePhotos', function($scope, $http, $routeParams){
 
 });
 
-myApp.loadOnScroll = function($scope, $http, photoData, photos, addStatus){
+function loadOnScroll ($scope, $http, photoData, photos, addStatus){
   var lastScrollTop = 0;
   window.addEventListener('scroll', function(e){
     var body = document.body,
@@ -232,7 +233,7 @@ myApp.loadOnScroll = function($scope, $http, photoData, photos, addStatus){
     }
     lastScrollTop = scrollTop;
   });
-};
+}
 
 // Add status to global followers array
 myApp.addStatus = function($scope, $http){
