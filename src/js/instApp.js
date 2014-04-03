@@ -48,12 +48,7 @@ myApp.controller('Profile', function($scope, $resource, $http, $routeParams){
 
     // Change Relationship status
     $scope.relationship = function(user){
-
-      if (user.status.outgoing_status === 'none'){
-        var action = 'follow';
-      } else {
-        action = 'unfollow';
-      }
+        var action = (user.status.outgoing_status === 'none') ? 'follow' : 'unfollow';
 
         $http({
           method: "GET",
@@ -84,14 +79,8 @@ myApp.controller('Profile', function($scope, $resource, $http, $routeParams){
 
     // Make Like everywhere it's possible
     $scope.like = function(picture){
-      var action;
-
       // Check if user liked current photo
-      if (picture.user_has_liked){
-        action = 'DELETE';
-      } else {
-        action = 'POST'
-      }
+      var action = (picture.user_has_liked) ? 'DELETE' : 'POST';
 
       // Make current type request
       $http({
