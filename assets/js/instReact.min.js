@@ -2,7 +2,8 @@
 ;(function (window, React, $, undefined) {
 
   var $main = document.querySelector('.main'),
-      timelineUrl = 'https://api.instagram.com/v1/users/self/feed?access_token=' + localStorage.accessToken;
+      token = localStorage.accessToken,
+      timelineUrl = 'https://api.instagram.com/v1/users/self/feed?access_token=' + token;
 
   var Timeline = React.createClass({
     getInitialState: function () {
@@ -38,7 +39,7 @@
   var TimelineList = React.createClass({
     render: function () {
       var timelineitem = this.props.data.map(function (picture) {
-        return(<TimelineItem element={picture} id={picture.id} type={picture.type} />);
+        return(<TimelineItem element={picture} user={picture.user} id={picture.id} type={picture.type} />);
       });
       return (
         <ul className="feed">
@@ -56,6 +57,14 @@
 
       return (
         <li className="feed__item">
+          <TimelineUser 
+            liked={this.props.element.user_has_liked} 
+            userId={this.props.user.id} 
+            username={this.props.user.username}
+            avatar={this.props.user.profile_picture} 
+            likes={this.props.element.likes.count}
+            photoId={this.props.element.id}
+          />
           <div className="photo">
             {element}
             <CommentsList comments={this.props.element.comments.data} />
@@ -100,10 +109,68 @@
     render: function() {
       return (
         <li className="comments__item">
-            <img src={this.props.src} className="comments__pic" />
-            <a className="comments__username" href="#/profile/">{this.props.author}</a>:&#160;
-            <span className="comments__text">{this.props.text}</span>
+          <img src={this.props.src} className="comments__pic" />
+          <a className="comments__username" href="#/profile/">{this.props.author}</a>:&#160;
+          <span className="comments__text">{this.props.text}</span>
         </li>
+      );
+    }
+  });
+
+  var TimelineUser = React.createClass({
+    render: function() {
+      return (
+        <div className="user">
+          <a href={'#/profile/' + this.props.userId} className="user__pic">
+            <img src={this.props.avatar} />
+          </a>
+          <span className="user__name">{this.props.username}</span>
+          <LikeHeart likes={this.props.likes} liked={this.props.liked} photoId={this.props.photoId} />
+        </div>
+      );
+    }
+  });
+
+  var LikeHeart = React.createClass({
+    getInitialState: function () {
+      return {
+        likes: this.props.likes,
+        liked: this.props.liked
+      }
+    },
+
+    like: function () {
+      var action = (this.state.liked) ? 'DELETE' : 'POST';
+
+      // Make current type request
+      $.ajax({
+          type: 'GET',
+          data: {
+            "access_token": token,
+            "photoId": this.props.photoId,
+            "action": action
+          },
+          url: '../php/like.php',
+          success: function () {
+            // Change counter depending on request type
+            if(this.state.liked){
+              this.setState({liked: false, likes: this.state.likes - 1});
+            } else {
+              this.setState({liked: true, likes: this.state.likes + 1});
+            }
+          }.bind(this),
+          error: function (err) {
+            console.error(err);
+          }
+        });
+    },
+
+    render: function () {
+      return (
+        <span className="user__likes">
+          <i className={this.state.liked ? 'user__like user__like_liked' : 'user__like'} onClick={this.like}></i>
+          <span className="user__likes-count">{this.state.likes}</span>
+        </span>
       );
     }
   });

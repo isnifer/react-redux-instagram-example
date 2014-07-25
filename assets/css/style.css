@@ -830,6 +830,9 @@ body .auth:hover
     font-weight: 700;
 
     display: block;
+    overflow: hidden;
+
+    width: 100px;
 
     text-align: center;
 
