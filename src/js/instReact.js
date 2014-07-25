@@ -50,20 +50,54 @@
   });
 
   var TimelineItem = React.createClass({
+    getInitialState: function () {
+      return {
+        liked: this.props.element.user_has_liked,
+        likes: this.props.element.likes.count
+      }
+    },
+
+    like: function () {
+      var action = (this.state.liked) ? 'DELETE' : 'POST';
+
+      // Make current type request
+      $.ajax({
+          type: 'GET',
+          data: {
+            "access_token": token,
+            "photoId": this.props.photoId,
+            "action": action
+          },
+          url: '../php/like.php',
+          success: function () {
+            // Change counter depending on request type
+            if(this.state.liked){
+              this.setState({liked: false, likes: this.state.likes - 1});
+            } else {
+              this.setState({liked: true, likes: this.state.likes + 1});
+            }
+          }.bind(this),
+          error: function (err) {
+            console.error(err);
+          }
+        });
+    },
+
     render: function () {
       var element = (this.props.type === 'video') ? 
         <TimelineVideo src={this.props.element.videos.standard_resolution.url} id={this.props.id} /> : 
-        <TimelinePhoto src={this.props.element.images.standard_resolution.url} id={this.props.id} />; 
+        <TimelinePhoto src={this.props.element.images.standard_resolution.url} id={this.props.id} liked={this.props.element.user_has_liked} makeLike={this.like} />; 
 
       return (
         <li className="feed__item">
           <TimelineUser 
-            liked={this.props.element.user_has_liked} 
+            liked={this.state.liked} 
             userId={this.props.user.id} 
             username={this.props.user.username}
             avatar={this.props.user.profile_picture} 
-            likes={this.props.element.likes.count}
+            likes={this.state.likes}
             photoId={this.props.element.id}
+            like={this.like}
           />
           <div className="photo">
             {element}
@@ -74,10 +108,39 @@
     }
   });
 
-  var TimelinePhoto = React.createClass({
+  var TimelineUser = React.createClass({
+    render: function() {
+      return (
+        <div className="user g-clf">
+          <a href={'#/profile/' + this.props.userId} className="user__pic">
+            <img src={this.props.avatar} />
+          </a>
+          <span className="user__name">{this.props.username}</span>
+          <LikeHeart likes={this.props.likes} liked={this.props.liked} photoId={this.props.photoId} makeLike={this.props.like} />
+        </div>
+      );
+    }
+  });
+
+  var LikeHeart = React.createClass({
     render: function () {
       return (
-        <img className="photo__pic" id={this.props.id} src={this.props.src} /> 
+        <span className="user__likes">
+          <i className={this.props.liked ? 'user__like user__like_liked' : 'user__like'} onClick={this.props.makeLike}></i>
+          <span className="user__likes-count">{this.props.likes}</span>
+        </span>
+      );
+    }
+  });
+
+  var TimelinePhoto = React.createClass({
+    getInitialState: function () {
+      return {liked: this.props.liked};
+    },
+
+    render: function () {
+      return (
+        <img className="photo__pic" id={this.props.id} src={this.props.src} onDoubleClick={this.props.makeLike} /> 
       );
     }
   });
@@ -113,64 +176,6 @@
           <a className="comments__username" href="#/profile/">{this.props.author}</a>:&#160;
           <span className="comments__text">{this.props.text}</span>
         </li>
-      );
-    }
-  });
-
-  var TimelineUser = React.createClass({
-    render: function() {
-      return (
-        <div className="user">
-          <a href={'#/profile/' + this.props.userId} className="user__pic">
-            <img src={this.props.avatar} />
-          </a>
-          <span className="user__name">{this.props.username}</span>
-          <LikeHeart likes={this.props.likes} liked={this.props.liked} photoId={this.props.photoId} />
-        </div>
-      );
-    }
-  });
-
-  var LikeHeart = React.createClass({
-    getInitialState: function () {
-      return {
-        likes: this.props.likes,
-        liked: this.props.liked
-      }
-    },
-
-    like: function () {
-      var action = (this.state.liked) ? 'DELETE' : 'POST';
-
-      // Make current type request
-      $.ajax({
-          type: 'GET',
-          data: {
-            "access_token": token,
-            "photoId": this.props.photoId,
-            "action": action
-          },
-          url: '../php/like.php',
-          success: function () {
-            // Change counter depending on request type
-            if(this.state.liked){
-              this.setState({liked: false, likes: this.state.likes - 1});
-            } else {
-              this.setState({liked: true, likes: this.state.likes + 1});
-            }
-          }.bind(this),
-          error: function (err) {
-            console.error(err);
-          }
-        });
-    },
-
-    render: function () {
-      return (
-        <span className="user__likes">
-          <i className={this.state.liked ? 'user__like user__like_liked' : 'user__like'} onClick={this.like}></i>
-          <span className="user__likes-count">{this.state.likes}</span>
-        </span>
       );
     }
   });
