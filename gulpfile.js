@@ -7,7 +7,7 @@ var gulp = require('gulp'),
     livereload = require('gulp-livereload');
 
 var paths = {
-    scripts: './src/js/common.js',
+    scripts: './src/js/*.js',
     styles: './src/stylus/**.styl'
 };
 

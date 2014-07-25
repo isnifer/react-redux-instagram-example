@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>Instagram App</title>
+    <meta name="description" content="Instagram App by iSnifer"/>
+    <meta name="keywords" content="Instagram, photos, likes, cats, girls"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="../icon-app.png" />
+    <link rel="stylesheet" href="../assets/css/style.min.css"/>
+    <link rel="stylesheet" href="../assets/css/plugins/fancybox/jquery.fancybox.css"/>
+</head>
+
+<body>
+
+    <div class="page">
+
+        <header class="header">
+
+            <ul class="menu g-clf">
+                <li class="menu__item"><a class="menu__link" href="#/">Timeline</a></li>
+                <li class="menu__item"><a class="menu__link" href="#/search/">Search</a></li>
+                <li class="menu__item"><a class="menu__link" href="#/profile/{{userId}}">Profile</a></li>
+                <li class="menu__item"><a class="menu__link" href="#/about/">About</a></li>
+                <li class="menu__item"><a class="menu__link">Follow Me</a></li>
+          </ul>
+
+        </header>
+
+        <div class="main g-clf"></div>
+
+        <footer class="footer">
+
+            <ul class="social">
+                <li class="social__item"><a class="social__link icon-facebook" href="#"></a></li>
+                <li class="social__item"><a class="social__link icon-twitter" href="#"></a></li>
+                <li class="social__item"><a class="social__link icon-VK" href="#"></a></li>
+                <li class="social__item"><a class="social__link icon-GitHub-circle" href="#"></a></li>
+            </ul>
+
+            <div class="footer__copyright">
+                &copy; Anton Kuznetsov<span class="footer__rights">. Instagram App. All rights on left!</span>
+            </div>
+
+        </footer>
+
+    </div>
+
+    <script type="text/javascript" src="../assets/js/libs/fb/react.min.js"></script>
+    <script type="text/javascript" src="../assets/js/libs/fb/JSXTransformer.js"></script>
+    <script type="text/javascript" src="../assets/js/libs/jquery-2.1.0.min.js"></script>
+    <!-- <script type="text/javascript" src="../assets/js/libs/angular.min.js"></script>
+    <script type="text/javascript" src="../assets/js/plugins/angular-route.min.js"></script>
+    <script type="text/javascript" src="../assets/js/plugins/angular-resource.min.js"></script> -->
+    <script type="text/javascript" src="../assets/js/plugins/jquery.fancybox.pack.js"></script>
+    <script type="text/jsx" src="../src/js/instReact.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.fancybox').fancybox();
+        });
+    </script>
+
+    <script src="http://localhost:35729/livereload.js"></script>
+
+</body>
+</html>
