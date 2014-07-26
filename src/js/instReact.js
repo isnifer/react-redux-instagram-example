@@ -65,7 +65,7 @@
           type: 'GET',
           data: {
             "access_token": token,
-            "photoId": this.props.photoId,
+            "photoId": this.props.id,
             "action": action
           },
           url: '../php/like.php',
@@ -180,6 +180,6 @@
     }
   });
 
-  React.renderComponent(<Timeline url={timelineUrl} />, $main);
+  React.renderComponent(<Timeline url={timelineUrl} interval={60000} />, $main);
 
 }(window, window.React, window.jQuery));
