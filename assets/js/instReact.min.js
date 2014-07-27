@@ -402,6 +402,10 @@
     componentDidMount: function () {
       this.getProfileData();
       this.getProfilePhotos();
+      $header.find('.profile__link_followers').on('click', function (e) {
+        e.preventDefault();
+        page(this.getAttribute('href'));
+      });
     },
     render: function () {
       var photos = this.state.photos.map(function (photo) {
@@ -426,14 +430,14 @@
                 <span className="profile__media-digits">{this.state.counts.media}</span>
               </li>
               <li className="profile__item">
-                <a href={'/react/profile/' + this.state.user.id + '/followers/'}>
+                <a className="profile__link_followers" href={'/react/profile/' + this.state.user.id + '/followed-by/'}>
                   <span className="profile__count">Followers</span><br />
                   <span className="profile__followed_by-digits">{this.state.counts.followed_by}</span>
                 </a>
               </li>
               <li className="profile__item">
-                <a href={'/react/profile/' + this.state.user.id + '/follows/'}>
-                  <span className="profile__count">Follow</span><br />
+                <a className="profile__link_followers" href={'/react/profile/' + this.state.user.id + '/follows/'}>
+                  <span className="profile__count profile__count_follow">Follow</span><br />
                   <span className="profile__follows-digits">{this.state.counts.follows}</span>
                 </a>
               </li>
@@ -470,6 +474,76 @@
 
   /* === ABOUT COMPONENTS END === */
   
+  /* === FOLLOWERS COMPONENTS START === */
+  
+  var Followers = React.createClass({
+    getInitialState: function () {
+      return {
+        followers: [],
+        pagination: {}
+      }
+    },
+    getFollowers: function (url) {
+      $.ajax({
+        url: url || 'https://api.instagram.com/v1/users/' + this.props.params.id + '/' + this.props.params.method + '?access_token=' + token,
+        dataType: 'jsonp',
+        success: function (data) {
+          this.setState({
+            followers: this.state.followers.concat(data.data),
+            pagination: data.pagination
+          });
+        }.bind(this),
+        error: function (err) {
+          console.error(err);
+        }
+      })
+    },
+    componentDidMount: function () {
+      this.getFollowers();
+      loadOnScrollBottom(this, this.getFollowers);
+    },
+    changeRelationship: function () {
+      return false;
+    },
+    getRelationshipStatus: function (follower, callback) {
+      $.ajax({
+        url: 'https://api.instagram.com/v1/users/' + follower.id + '/relationship?access_token=' + token,
+        dataType: 'jsonp',
+        success: function (data) {
+          follower.status = {};
+          follower.status.outgoing_status = data.data;
+        },
+        error: function (err) {
+          console.error(err);
+        }
+      });
+    },
+    render: function () {
+      var _this = this;
+      var followers = this.state.followers.map(function(follower) {
+        _this.getRelationshipStatus(follower);
+        return (
+          <div className="follow__item">
+            <a href={'/react/profile/' + follower.id + '/'}>
+              <img className="follow__avatar" src={follower.profile_picture} />
+              <span className="follow__username">@{follower.username}</span>
+            </a>
+          </div>
+        );
+      });
+      return (
+        <div className="follow">
+          <header className="follow__header">{this.props.params.method === 'follows' && 'Follows' || 'Followers'}</header>
+          <div className="follow__list">
+            {followers}
+          </div>
+        </div>
+      );
+    }
+  });
+
+  /* === FOLLOWERS COMPONENTS END === */
+  
   /* === MENU COMPONENTS START === */
 
   var Menu = React.createClass({
@@ -491,6 +565,7 @@
     ['/react/', Timeline],
     ['/react/search/', Search],
     ['/react/profile/:id/', Profile],
+    ['/react/profile/:id/:method/', Followers],
     ['/react/about/', About],
     ['*', PageNotFound]
   ];

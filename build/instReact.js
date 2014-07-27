@@ -402,6 +402,10 @@
     componentDidMount: function () {
       this.getProfileData();
       this.getProfilePhotos();
+      $header.find('.profile__link_followers').on('click', function (e) {
+        e.preventDefault();
+        page(this.getAttribute('href'));
+      });
     },
     render: function () {
       var photos = this.state.photos.map(function (photo) {
@@ -426,14 +430,14 @@
                 React.DOM.span({className: "profile__media-digits"}, this.state.counts.media)
               ), 
               React.DOM.li({className: "profile__item"}, 
-                React.DOM.a({href: '/react/profile/' + this.state.user.id + '/followers/'}, 
+                React.DOM.a({className: "profile__link_followers", href: '/react/profile/' + this.state.user.id + '/followed-by/'}, 
                   React.DOM.span({className: "profile__count"}, "Followers"), React.DOM.br(null), 
                   React.DOM.span({className: "profile__followed_by-digits"}, this.state.counts.followed_by)
                 )
               ), 
               React.DOM.li({className: "profile__item"}, 
-                React.DOM.a({href: '/react/profile/' + this.state.user.id + '/follows/'}, 
-                  React.DOM.span({className: "profile__count"}, "Follow"), React.DOM.br(null), 
+                React.DOM.a({className: "profile__link_followers", href: '/react/profile/' + this.state.user.id + '/follows/'}, 
+                  React.DOM.span({className: "profile__count profile__count_follow"}, "Follow"), React.DOM.br(null), 
                   React.DOM.span({className: "profile__follows-digits"}, this.state.counts.follows)
                 )
               )
@@ -470,6 +474,76 @@
 
   /* === ABOUT COMPONENTS END === */
   
+  /* === FOLLOWERS COMPONENTS START === */
+  
+  var Followers = React.createClass({displayName: 'Followers',
+    getInitialState: function () {
+      return {
+        followers: [],
+        pagination: {}
+      }
+    },
+    getFollowers: function (url) {
+      $.ajax({
+        url: url || 'https://api.instagram.com/v1/users/' + this.props.params.id + '/' + this.props.params.method + '?access_token=' + token,
+        dataType: 'jsonp',
+        success: function (data) {
+          this.setState({
+            followers: this.state.followers.concat(data.data),
+            pagination: data.pagination
+          });
+        }.bind(this),
+        error: function (err) {
+          console.error(err);
+        }
+      })
+    },
+    componentDidMount: function () {
+      this.getFollowers();
+      loadOnScrollBottom(this, this.getFollowers);
+    },
+    changeRelationship: function () {
+      return false;
+    },
+    getRelationshipStatus: function (follower, callback) {
+      $.ajax({
+        url: 'https://api.instagram.com/v1/users/' + follower.id + '/relationship?access_token=' + token,
+        dataType: 'jsonp',
+        success: function (data) {
+          follower.status = {};
+          follower.status.outgoing_status = data.data;
+        },
+        error: function (err) {
+          console.error(err);
+        }
+      });
+    },
+    render: function () {
+      var _this = this;
+      var followers = this.state.followers.map(function(follower) {
+        _this.getRelationshipStatus(follower);
+        return (
+          React.DOM.div({className: "follow__item"}, 
+            React.DOM.a({href: '/react/profile/' + follower.id + '/'}, 
+              React.DOM.img({className: "follow__avatar", src: follower.profile_picture}), 
+              React.DOM.span({className: "follow__username"}, "@", follower.username)
+            )
+          )
+        );
+      });
+      return (
+        React.DOM.div({className: "follow"}, 
+          React.DOM.header({className: "follow__header"}, this.props.params.method === 'follows' && 'Follows' || 'Followers'), 
+          React.DOM.div({className: "follow__list"}, 
+            followers
+          )
+        )
+      );
+    }
+  });
+
+  /* === FOLLOWERS COMPONENTS END === */
+  
   /* === MENU COMPONENTS START === */
 
   var Menu = React.createClass({displayName: 'Menu',
@@ -491,6 +565,7 @@
     ['/react/', Timeline],
     ['/react/search/', Search],
     ['/react/profile/:id/', Profile],
+    ['/react/profile/:id/:method/', Followers],
     ['/react/about/', About],
     ['*', PageNotFound]
   ];
