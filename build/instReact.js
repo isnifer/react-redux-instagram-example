@@ -17,9 +17,9 @@
 
   /* === ROUTER START === */
 
-  var Router = React.createClass({
+  var Router = React.createClass({displayName: 'Router',
     getInitialState: function () {
-      return {component: <div/>}
+      return {component: React.DOM.div(null)}
     },
     componentDidMount: function () {
       var self = this;
@@ -31,7 +31,7 @@
 
         page(url, function (ctx) {
           self.setState({ 
-            component: <Component params={ctx.params} querystring={ctx.querystring} /> 
+            component: Component({params: ctx.params, querystring: ctx.querystring}) 
           });
         });
 
@@ -54,7 +54,7 @@
 
   /* === TIMELINE COMPONENTS START === */
 
-  var Timeline = React.createClass({
+  var Timeline = React.createClass({displayName: 'Timeline',
     getInitialState: function () {
       return {
         data: [],
@@ -86,27 +86,27 @@
 
     render: function () {
       return (
-        <div className="timeline">
-          <TimelineList data={this.state.data} />
-        </div>
+        React.DOM.div({className: "timeline"}, 
+          TimelineList({data: this.state.data})
+        )
       );
     }
   });
 
-  var TimelineList = React.createClass({
+  var TimelineList = React.createClass({displayName: 'TimelineList',
     render: function () {
       var timelineitem = this.props.data.map(function (picture) {
-        return(<TimelineItem element={picture} user={picture.user} id={picture.id} type={picture.type} />);
+        return(TimelineItem({element: picture, user: picture.user, id: picture.id, type: picture.type}));
       });
       return (
-        <ul className="feed">
-          {timelineitem}
-        </ul>
+        React.DOM.ul({className: "feed"}, 
+          timelineitem
+        )
       );
     }
   });
 
-  var TimelineItem = React.createClass({
+  var TimelineItem = React.createClass({displayName: 'TimelineItem',
     getInitialState: function () {
       return {
         liked: this.props.element.user_has_liked,
@@ -142,97 +142,97 @@
 
     render: function () {
       var element = (this.props.type === 'video') ? 
-        <TimelineVideo src={this.props.element.videos.standard_resolution.url} id={this.props.id} /> : 
-        <TimelinePhoto src={this.props.element.images.standard_resolution.url} id={this.props.id} liked={this.props.element.user_has_liked} makeLike={this.like} />; 
+        TimelineVideo({src: this.props.element.videos.standard_resolution.url, id: this.props.id}) : 
+        TimelinePhoto({src: this.props.element.images.standard_resolution.url, id: this.props.id, liked: this.props.element.user_has_liked, makeLike: this.like}); 
 
       return (
-        <li className="feed__item">
-          <TimelineUser 
-            liked={this.state.liked} 
-            userId={this.props.user.id} 
-            username={this.props.user.username}
-            avatar={this.props.user.profile_picture} 
-            likes={this.state.likes}
-            photoId={this.props.element.id}
-            like={this.like}
-          />
-          <div className="photo">
-            {element}
-            <CommentsList comments={this.props.element.comments.data} />
-          </div>
-        </li>
+        React.DOM.li({className: "feed__item"}, 
+          TimelineUser({
+            liked: this.state.liked, 
+            userId: this.props.user.id, 
+            username: this.props.user.username, 
+            avatar: this.props.user.profile_picture, 
+            likes: this.state.likes, 
+            photoId: this.props.element.id, 
+            like: this.like}
+          ), 
+          React.DOM.div({className: "photo"}, 
+            element, 
+            CommentsList({comments: this.props.element.comments.data})
+          )
+        )
       );
     }
   });
 
-  var TimelineUser = React.createClass({
+  var TimelineUser = React.createClass({displayName: 'TimelineUser',
     render: function() {
       return (
-        <div className="user g-clf">
-          <a href={'#/profile/' + this.props.userId} className="user__pic">
-            <img src={this.props.avatar} />
-          </a>
-          <span className="user__name">{this.props.username}</span>
-          <LikeHeart likes={this.props.likes} liked={this.props.liked} makeLike={this.props.like} />
-        </div>
+        React.DOM.div({className: "user g-clf"}, 
+          React.DOM.a({href: '#/profile/' + this.props.userId, className: "user__pic"}, 
+            React.DOM.img({src: this.props.avatar})
+          ), 
+          React.DOM.span({className: "user__name"}, this.props.username), 
+          LikeHeart({likes: this.props.likes, liked: this.props.liked, makeLike: this.props.like})
+        )
       );
     }
   });
 
-  var LikeHeart = React.createClass({
+  var LikeHeart = React.createClass({displayName: 'LikeHeart',
     render: function () {
       return (
-        <span className="user__likes">
-          <i className={this.props.liked ? 'user__like user__like_liked' : 'user__like'} onClick={this.props.makeLike}></i>
-          <span className="user__likes-count">{this.props.likes}</span>
-        </span>
+        React.DOM.span({className: "user__likes"}, 
+          React.DOM.i({className: this.props.liked ? 'user__like user__like_liked' : 'user__like', onClick: this.props.makeLike}), 
+          React.DOM.span({className: "user__likes-count"}, this.props.likes)
+        )
       );
     }
   });
 
-  var TimelinePhoto = React.createClass({
+  var TimelinePhoto = React.createClass({displayName: 'TimelinePhoto',
     getInitialState: function () {
       return {liked: this.props.liked};
     },
 
     render: function () {
       return (
-        <img className="photo__pic" id={this.props.id} src={this.props.src} onDoubleClick={this.props.makeLike} /> 
+        React.DOM.img({className: "photo__pic", id: this.props.id, src: this.props.src, onDoubleClick: this.props.makeLike}) 
       );
     }
   });
 
-  var TimelineVideo = React.createClass({
+  var TimelineVideo = React.createClass({displayName: 'TimelineVideo',
     render: function () {
       return (
-        <video className="photo__pic" id={this.props.id} controls>
-          <source src={this.props.src}></source>
-        </video>
+        React.DOM.video({className: "photo__pic", id: this.props.id, controls: true}, 
+          React.DOM.source({src: this.props.src})
+        )
       );
     }
   });
 
-  var CommentsList = React.createClass({
+  var CommentsList = React.createClass({displayName: 'CommentsList',
     render: function() {
       var comment = this.props.comments.map(function (comment) {
-        return(<CommentsItem src={comment.from.profile_picture} authorId={comment.from.id} author={comment.from.username} text={comment.text} />);
+        return(CommentsItem({src: comment.from.profile_picture, authorId: comment.from.id, author: comment.from.username, text: comment.text}));
       }); 
       return (
-        <ul className="comments">
-          {comment}
-        </ul>
+        React.DOM.ul({className: "comments"}, 
+          comment
+        )
       );
     }
   });
 
-  var CommentsItem = React.createClass({
+  var CommentsItem = React.createClass({displayName: 'CommentsItem',
     render: function() {
       return (
-        <li className="comments__item">
-          <img src={this.props.src} className="comments__pic" />
-          <a className="comments__username" href="#/profile/">{this.props.author}</a>:&#160;
-          <span className="comments__text">{this.props.text}</span>
-        </li>
+        React.DOM.li({className: "comments__item"}, 
+          React.DOM.img({src: this.props.src, className: "comments__pic"}), 
+          React.DOM.a({className: "comments__username", href: "#/profile/"}, this.props.author), ": ", 
+          React.DOM.span({className: "comments__text"}, this.props.text)
+        )
       );
     }
   });
@@ -241,7 +241,7 @@
 
   /* === SEARCH COMPONENTS START === */
 
-  var Search = React.createClass({
+  var Search = React.createClass({displayName: 'Search',
     getInitialState: function () {
       return {
         data: [],
@@ -313,31 +313,31 @@
     },
     render: function () {
       return (
-        <div className="search">
-          <form className="search__form" onSubmit={this.search}>
-            <input type="text" defaultValue={this.state.query} ref="searchInput" className="search__input"  placeholder="Search photo by Hashtag"/>
-          </form>
-          <ResultList searchResult={this.state.data} />
-        </div>
+        React.DOM.div({className: "search"}, 
+          React.DOM.form({className: "search__form", onSubmit: this.search}, 
+            React.DOM.input({type: "text", defaultValue: this.state.query, ref: "searchInput", className: "search__input", placeholder: "Search photo by Hashtag"})
+          ), 
+          ResultList({searchResult: this.state.data})
+        )
       );
     }
   });
 
-  var ResultList = React.createClass({
+  var ResultList = React.createClass({displayName: 'ResultList',
     render: function () {
       var items = this.props.searchResult.map(function (photo) {
         return (
-          <a className="photo-list__item fancybox" 
-             href={photo.images.standard_resolution.url} 
-             title={photo.caption && photo.caption.text || ''}>
-            <img src={photo.images.standard_resolution.url} />
-          </a>
+          React.DOM.a({className: "photo-list__item fancybox", 
+             href: photo.images.standard_resolution.url, 
+             title: photo.caption && photo.caption.text || ''}, 
+            React.DOM.img({src: photo.images.standard_resolution.url})
+          )
         )
       });
       return (
-        <div className="photo-list">
-          {items}  
-        </div>
+        React.DOM.div({className: "photo-list"}, 
+          items
+        )
       );
     }
   });
@@ -346,10 +346,10 @@
   
   /* === 404 COMPONENTS END === */
 
-  var PageNotFound = React.createClass({
+  var PageNotFound = React.createClass({displayName: 'PageNotFound',
     render: function () {
       return (
-        <div>Page not found</div>
+        React.DOM.div(null, "Page not found")
       );
     }
   });
@@ -362,6 +362,6 @@
     ['*', PageNotFound]
   ];
 
-  React.renderComponent(<Router routes={routes} />, $main)
+  React.renderComponent(Router({routes: routes}), $main)
 
 }(window, window.React, window.jQuery, window.page));
