@@ -2,8 +2,9 @@
 ;(function (window, React, $, page, undefined) {
 
   var $main = document.querySelector('.main'),
+      $header = $('.header'),
       token = localStorage.accessToken,
-      links = $('.menu__link'),
+      userId = localStorage.userId,
       timelineUrl = 'https://api.instagram.com/v1/users/self/feed?access_token=' + token,
       popularUrl = 'https://api.instagram.com/v1/media/popular/?access_token=' + token,
       loadOnScrollBottom = function(ctx, callback) {
@@ -39,7 +40,7 @@
 
       page.start();
 
-      links.on('click', function (e) {
+      $header.find('.menu__link').on('click', function (e) {
         e.preventDefault();
         page(this.getAttribute('href'));
       });
@@ -169,7 +170,7 @@
     render: function() {
       return (
         <div className="user g-clf">
-          <a href={'#/profile/' + this.props.userId} className="user__pic">
+          <a href={'/react/profile/' + this.props.userId} className="user__pic">
             <img src={this.props.avatar} />
           </a>
           <span className="user__name">{this.props.username}</span>
@@ -230,7 +231,7 @@
       return (
         <li className="comments__item">
           <img src={this.props.src} className="comments__pic" />
-          <a className="comments__username" href="#/profile/">{this.props.author}</a>:&#160;
+          <a className="comments__username" href="/react/profile/">{this.props.author}</a>:&#160;
           <span className="comments__text">{this.props.text}</span>
         </li>
       );
@@ -309,7 +310,7 @@
     },
     componentDidMount: function () {
       this.loadPopular();
-      loadOnScrollBottom(this, this.loadPopular);
+      $(window).off('scroll');
     },
     render: function () {
       return (
@@ -355,13 +356,154 @@
   });
 
   /* === 404 COMPONENTS END === */
+  
+  /* === PROFILE COMPONENTS START === */
+  
+  var Profile = React.createClass({
+    getInitialState: function () {
+      return {
+        user: {},
+        counts: {},
+        photos: [],
+        pagination: {}
+      }
+    },
+    getProfileData: function () {
+      $.ajax({
+        url: 'https://api.instagram.com/v1/users/' + this.props.params.id + '?access_token=' + token,
+        dataType: 'jsonp',
+        success: function (data) {
+          this.setState({
+            user: data.data,
+            counts: data.data.counts
+          });
+        }.bind(this),
+        error: function (err) {
+          console.error(err);
+        }
+      })
+    },
+    getProfilePhotos: function (url) {
+      $.ajax({
+        url: url || 'https://api.instagram.com/v1/users/' + this.props.params.id + '/media/recent?access_token=' + token,
+        dataType: 'jsonp',
+        success: function (data) {
+          this.setState({
+            photos: this.state.photos.concat(data.data),
+            pagination: data.pagination
+          });
+          loadOnScrollBottom(this, this.getProfilePhotos)
+        }.bind(this),
+        error: function (err) {
+          console.error(err);
+        }
+      });
+    },
+    componentDidMount: function () {
+      this.getProfileData();
+      this.getProfilePhotos();
+    },
+    render: function () {
+      var photos = this.state.photos.map(function (photo) {
+        return (<div className="photo-list__item">
+                  <a className="fancybox" href={photo.images.standard_resolution.url}>
+                    <img src={photo.images.low_resolution.url} title={photo.caption && photo.caption.text || ''} />
+                  </a>
+                  <span className="photo-list__likes" onClick={this.photoLike}>Likes: {photo.likes.count}</span>
+                </div>
+        );
+      });
+      return (
+        <div className="profile">
+          <div className="profile__data">
+            <div className="profile__photo">
+              <img src={this.state.user.profile_picture} alt={this.state.user.username} className="profile__picture"/>
+            </div>
+            <div className="profile__username">{this.state.user.username}</div>
+            <ul className="profile__stats">
+              <li className="profile__item">
+                <span className="profile__count">Photos</span><br />
+                <span className="profile__media-digits">{this.state.counts.media}</span>
+              </li>
+              <li className="profile__item">
+                <a href={'/react/profile/' + this.state.user.id + '/followers/'}>
+                  <span className="profile__count">Followers</span><br />
+                  <span className="profile__followed_by-digits">{this.state.counts.followed_by}</span>
+                </a>
+              </li>
+              <li className="profile__item">
+                <a href={'/react/profile/' + this.state.user.id + '/follows/'}>
+                  <span className="profile__count">Follow</span><br />
+                  <span className="profile__follows-digits">{this.state.counts.follows}</span>
+                </a>
+              </li>
+            </ul>
+            <ul className="profile__info">
+              <li className="profile__item">{this.state.user.full_name}</li>
+              <li className="profile__item">{this.state.user.bio}</li>
+              <li className="profile__item">
+                <a href={this.state.user.website} target="_blank" className="profile__url">
+                  {this.state.user.website}
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="photo-list">
+            {photos}
+          </div>
+        </div>
+      );
+    }
+  });
+
+  /* === PROFILE COMPONENTS END === */
+  
+  /* === ABOUT COMPONENTS START === */
+  
+  var About = React.createClass({
+    render: function () {
+      return (
+        <div>About</div>
+      );
+    }
+  });
+
+  /* === ABOUT COMPONENTS END === */
+  
+  /* === MENU COMPONENTS START === */
+
+  var Menu = React.createClass({
+    render: function () {
+      var links = this.props.links.map(function (link) {
+        return (<li className="menu__item"><a className="menu__link" href={(link[1] === 'Profile') ? link[0] + userId + '/' : link[0]}>{link[1]}</a></li>);
+      });
+      return (
+        <ul className="menu g-clf">
+          {links}
+        </ul>
+      ); 
+    }
+  });
+
+  /* === MENU COMPONENTS END === */
 
   var routes = [
     ['/react/', Timeline],
     ['/react/search/', Search],
+    ['/react/profile/:id/', Profile],
+    ['/react/about/', About],
     ['*', PageNotFound]
   ];
 
-  React.renderComponent(<Router routes={routes} />, $main)
+  var links = [
+    ['/react/', 'Timeline'],
+    ['/react/search/', 'Search'],
+    ['/react/profile/', 'Profile'],
+    ['/react/about/', 'About'],
+    ['/react/', 'Follow Me']
+  ];
+
+  React.renderComponent(<Menu links={links} />, $header[0]);
+  React.renderComponent(<Router routes={routes} />, $main);
 
 }(window, window.React, window.jQuery, window.page));

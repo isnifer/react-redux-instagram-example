@@ -593,7 +593,7 @@ body .auth:hover
 }
 .profile__username
 {
-    font: bold 2em 'Roboto Condensed';
+    font: bold 2em;
     line-height: 20px;
 
     margin: 10px 0 0;
@@ -615,7 +615,7 @@ body .auth:hover
 }
 .profile__item
 {
-    font: normal 1.25em 'Roboto Condensed';
+    font: normal 1.25em;
 
     display: inline-block;
 
