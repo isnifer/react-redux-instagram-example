@@ -120,25 +120,25 @@
 
       // Make current type request
       $.ajax({
-          type: 'GET',
-          data: {
-            "access_token": token,
-            "photoId": this.props.id,
-            "action": action
-          },
-          url: '../php/like.php',
-          success: function () {
-            // Change counter depending on request type
-            if(this.state.liked){
-              this.setState({liked: false, likes: this.state.likes - 1});
-            } else {
-              this.setState({liked: true, likes: this.state.likes + 1});
-            }
-          }.bind(this),
-          error: function (err) {
-            console.error(err);
+        type: 'GET',
+        data: {
+          "access_token": token,
+          "photoId": this.props.id,
+          "action": action
+        },
+        url: '/php/like.php',
+        success: function () {
+          // Change counter depending on request type
+          if(this.state.liked){
+            this.setState({liked: false, likes: this.state.likes - 1});
+          } else {
+            this.setState({liked: true, likes: this.state.likes + 1});
           }
-        });
+        }.bind(this),
+        error: function (err) {
+          console.error(err);
+        }
+      });
     },
 
     render: function () {
@@ -388,6 +388,7 @@
         url: url || 'https://api.instagram.com/v1/users/' + this.props.params.id + '/media/recent?access_token=' + token,
         dataType: 'jsonp',
         success: function (data) {
+          console.log(data.data);
           this.setState({
             photos: this.state.photos.concat(data.data),
             pagination: data.pagination
@@ -409,12 +410,13 @@
     },
     render: function () {
       var photos = this.state.photos.map(function (photo) {
-        return (<div className="photo-list__item">
-                  <a className="fancybox" href={photo.images.standard_resolution.url}>
-                    <img src={photo.images.low_resolution.url} title={photo.caption && photo.caption.text || ''} />
-                  </a>
-                  <span className="photo-list__likes" onClick={this.photoLike}>Likes: {photo.likes.count}</span>
-                </div>
+        return (
+          <div className="photo-list__item">
+            <a className="fancybox" href={photo.images.standard_resolution.url}>
+              <img src={photo.images.low_resolution.url} title={photo.caption && photo.caption.text || ''} />
+            </a>
+            <ProfileLikeCounter count={photo.likes.count} state={photo.user_has_liked} id={photo.id} />
+          </div>
         );
       });
       return (
@@ -456,6 +458,23 @@
             {photos}
           </div>
         </div>
+      );
+    }
+  });
+
+  var ProfileLikeCounter = React.createClass({
+    getInitialState: function () {
+      return {
+        likes: this.props.count,
+        liked: this.props.state
+      };
+    },
+    like: function () {
+      TimelineItem.prototype.type.prototype.like.call(this);
+    },
+    render: function () {
+      return (
+        <span className="photo-list__likes" onClick={this.like}>Likes: {this.state.likes}</span>
       );
     }
   });
