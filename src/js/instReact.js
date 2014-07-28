@@ -604,8 +604,7 @@
     ['/react/', 'Timeline'],
     ['/react/search/', 'Search'],
     ['/react/profile/', 'Profile'],
-    ['/react/about/', 'About'],
-    ['/react/', 'Follow Me']
+    ['/react/about/', 'About']
   ];
 
   React.renderComponent(<Menu links={links} />, $header[0]);
