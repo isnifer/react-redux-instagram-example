@@ -502,32 +502,15 @@
       this.getFollowers();
       loadOnScrollBottom(this, this.getFollowers);
     },
-    changeRelationship: function () {
-      return false;
-    },
-    getRelationshipStatus: function (follower, callback) {
-      $.ajax({
-        url: 'https://api.instagram.com/v1/users/' + follower.id + '/relationship?access_token=' + token,
-        dataType: 'jsonp',
-        success: function (data) {
-          follower.status = {};
-          follower.status.outgoing_status = data.data;
-        },
-        error: function (err) {
-          console.error(err);
-        }
-      });
-    },
     render: function () {
-      var _this = this;
       var followers = this.state.followers.map(function(follower) {
-        _this.getRelationshipStatus(follower);
         return (
           React.DOM.div({className: "follow__item"}, 
             React.DOM.a({href: '/react/profile/' + follower.id + '/'}, 
               React.DOM.img({className: "follow__avatar", src: follower.profile_picture}), 
               React.DOM.span({className: "follow__username"}, "@", follower.username)
-            )
+            ), 
+            RelationshipButton({id: follower.id})
           )
         );
       });
@@ -537,6 +520,53 @@
           React.DOM.div({className: "follow__list"}, 
             followers
           )
+        )
+      );
+    }
+  });
+
+  var RelationshipButton = React.createClass({displayName: 'RelationshipButton',
+    getInitialState: function () {
+      return {status: ''}
+    },
+    getRelationshipStatus: function (follower, callback) {
+      $.ajax({
+        url: 'https://api.instagram.com/v1/users/' + this.props.id + '/relationship?access_token=' + token,
+        dataType: 'jsonp',
+        success: function (data) {
+          this.setState({status: data.data.outgoing_status});
+        }.bind(this),
+        error: function (err) {
+          console.error(err);
+        }
+      });
+    },
+    changeRelationship: function () {
+      $.ajax({
+        url: '/php/followMe.php',
+        dataType: 'json',
+        data: {
+          action: this.state.status === 'none' ? 'follow' : 'unfollow', 
+          access_token: token, 
+          userId: this.props.id
+        },
+        success: function (data) {
+          this.setState({status: data.data.outgoing_status});
+        }.bind(this),
+        error: function (err) {
+          console.error(err);
+        }
+      });
+    },
+    componentDidMount: function () {
+      this.getRelationshipStatus();
+    },
+    render: function () {
+      return (
+        React.DOM.button({
+          className: 'follow__btn ' + (this.state.status === 'none' ? 'follow__btn_read' : 'follow__btn_unread'), 
+          onClick: this.changeRelationship}, 
+          this.state.status === 'none' ? 'Follow' : 'Unfollow'
         )
       );
     }

@@ -927,9 +927,10 @@ body .auth:hover
 /* Followers and Follows */
 .follow__header
 {
-    font: bold 2em 'Roboto Condensed', Arial, Tahoma;
+    font-size: 2em;
+    font-weight: 700;
 
-    margin: 0;
+    margin: 20px 0;
 
     text-align: center;
 
@@ -968,7 +969,8 @@ body .auth:hover
 }
 .follow__item a
 {
-    font: bold 1.25em 'Roboto Condensed';
+    font-size: 1.25em;
+    font-weight: bold;
 
     text-align: center;
     text-decoration: none;
@@ -1002,7 +1004,7 @@ body .auth:hover
 {
     float: right;
 
-    margin: 10px 10px 0 0;
+    margin: 35px 10px 0 0;
     padding: 3px 10px;
 
     color: #fff;
