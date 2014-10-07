@@ -120,7 +120,7 @@
           "photoId": this.props.id,
           "action": action
         },
-        url: '/php/like.php',
+        url: '../php/like.php',
         success: function () {
           // Change counter depending on request type
           if(this.state.liked){
@@ -615,7 +615,7 @@
     },
     changeRelationship: function () {
       $.ajax({
-        url: '/php/followMe.php',
+        url: '../php/followMe.php',
         dataType: 'json',
         data: {
           action: this.state.status === 'none' ? 'follow' : 'unfollow', 
