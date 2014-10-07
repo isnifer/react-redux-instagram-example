@@ -6,8 +6,8 @@
   "description": "Gulp Boilerplate",
   "homepage": "http://isnifer.me",
   "license": "MIT",
-  "repository": { 
-    "type": "git", 
+  "repository": {
+    "type": "git",
     "url": "https://github.com/iSnifer/grunt-boilerplate.git"
   },
   "devDependencies": {
@@ -17,6 +17,7 @@
     "gulp-csscomb": "~0.1.0",
     "gulp-csso": "~0.2.6",
     "gulp-rename": "~1.2.0",
-    "gulp-livereload": "~1.2.0"
+    "gulp-livereload": "~1.2.0",
+    "gulp-react": "~1.0.2"
   }
 }

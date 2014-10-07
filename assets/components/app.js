@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-;(function (window, React, $, page, undefined) {
+;(function (window, React, $, Grapnel, undefined) {
 
   var $main = document.querySelector('.main'),
       $header = $('.header'),
@@ -30,19 +30,13 @@
         var url = route[0];
         var Component = route[1];
 
-        page(url, function (ctx) {
+        var router = new Grapnel();
+        router.get(url, function(req){
           self.setState({ 
-            component: Component({params: ctx.params, querystring: ctx.querystring}) 
-          });
+            component: Component({params: req.params}) 
+          });    
         });
 
-      });
-
-      page.start();
-
-      $header.find('.menu__link').on('click', function (e) {
-        e.preventDefault();
-        page(this.getAttribute('href'));
       });
 
     },
@@ -240,9 +234,9 @@
 
   /* === TIMELINE COMPONENTS END === */
 
-  /* === SEARCH COMPONENTS START === */
+  /* === SEARCH PHOTOS COMPONENTS START === */
 
-  var Search = React.createClass({displayName: 'Search',
+  var SearchPhotos = React.createClass({displayName: 'SearchPhotos',
     getInitialState: function () {
       return {
         data: [],
@@ -343,7 +337,67 @@
     }
   });
 
-  /* === SEARCH COMPONENTS END === */
+  /* === SEARCH PHOTOS COMPONENTS END === */
+  
+  /* === SEARCH USERS COMPONENTS START === */
+
+  var SearchUsers = React.createClass({displayName: 'SearchUsers',
+    getInitialState: function () {
+      return {
+        data: [],
+        query: ''
+      }
+    },
+    search: function (e) {
+      e.preventDefault();
+      var _this = this;
+      $.ajax({
+        url: 'https://api.instagram.com/v1/users/search?q=' + _this.refs.searchInput.state.value + '&access_token=' + token,
+        dataType: 'jsonp',
+        success: function (data) {
+          if (data.meta.code === 200) {
+            this.setState({
+              data: data.data
+            });
+          }
+        }.bind(this),
+        error: function (err) {
+          console.error(err);
+        }
+      });
+    },
+    render: function () {
+      return (
+        React.DOM.div({className: "search"}, 
+          React.DOM.form({className: "search__form", onSubmit: this.search}, 
+            React.DOM.input({type: "text", defaultValue: this.state.query, ref: "searchInput", className: "search__input", placeholder: "Search by Username"})
+          ), 
+          PeopleList({searchResult: this.state.data})
+        )
+      );
+    }
+  });
+
+  var PeopleList = React.createClass({displayName: 'PeopleList',
+    render: function () {
+      var items = this.props.searchResult.map(function (photo) {
+        return (
+          React.DOM.a({className: "photo-list__item fancybox", 
+             href: '#/profile/' + photo.id, 
+             title: photo.username || ''}, 
+            React.DOM.img({src: photo.profile_picture})
+          )
+        )
+      });
+      return (
+        React.DOM.div({className: "photo-list"}, 
+          items
+        )
+      );
+    }
+  });
+
+  /* === SEARCH USERS COMPONENTS END === */
   
   /* === 404 COMPONENTS END === */
 
@@ -388,7 +442,6 @@
         url: url || 'https://api.instagram.com/v1/users/' + this.props.params.id + '/media/recent?access_token=' + token,
         dataType: 'jsonp',
         success: function (data) {
-          console.log(data.data);
           this.setState({
             photos: this.state.photos.concat(data.data),
             pagination: data.pagination
@@ -611,22 +664,23 @@
   /* === MENU COMPONENTS END === */
 
   var routes = [
-    ['/react/', Timeline],
-    ['/react/search/', Search],
-    ['/react/profile/:id/', Profile],
-    ['/react/profile/:id/:method/', Followers],
-    ['/react/about/', About],
-    ['*', PageNotFound]
+    ['/', Timeline],
+    ['/search/photos/?', SearchPhotos],
+    ['/search/users/?', SearchUsers],
+    ['/profile/:id/?', Profile],
+    ['/profile/:id/:method/?', Followers],
+    ['/about/', About]
   ];
 
   var links = [
-    ['/react/', 'Timeline'],
-    ['/react/search/', 'Search'],
-    ['/react/profile/', 'Profile'],
-    ['/react/about/', 'About']
+    ['#/', 'Timeline'],
+    ['#/search/photos/', 'Photos'],
+    ['#/search/users/', 'People'],
+    ['#/profile/', 'Profile'],
+    ['#/about/', 'About']
   ];
 
   React.renderComponent(Menu({links: links}), $header[0]);
   React.renderComponent(Router({routes: routes}), $main);
 
-}(window, window.React, window.jQuery, window.page));
+}(window, window.React, window.jQuery, window.Grapnel));

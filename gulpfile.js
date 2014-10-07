@@ -4,11 +4,13 @@ var gulp = require('gulp'),
     csscomb = require('gulp-csscomb'),
     cssmin = require('gulp-csso'),
     rename = require('gulp-rename'),
-    livereload = require('gulp-livereload');
+    livereload = require('gulp-livereload')
+    react = require('gulp-react');
 
 var paths = {
-    scripts: './src/js/*.js',
-    styles: './src/stylus/**.styl'
+    scripts: 'src/js/*.js',
+    jsx: 'src/jsx/*.jsx',
+    styles: 'src/stylus/**.styl'
 };
 
 gulp.task('uglify', function () {
@@ -19,8 +21,18 @@ gulp.task('uglify', function () {
         .pipe(livereload());
 });
 
+gulp.task('jsx', function () {
+    return gulp.src(paths.jsx)
+        .pipe(react())
+        .pipe(gulp.dest('./assets/components'))
+        .pipe(uglify({mangle: false, compress: true}))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest('./assets/components'))
+        .pipe(livereload());
+});
+
 gulp.task('stylus', function () {
-    return gulp.src('./src/stylus/style.styl')
+    return gulp.src('src/stylus/style.styl')
         .pipe(stylus({use: ['nib']}))
         .pipe(csscomb())
         .pipe(gulp.dest('./assets/css'))
@@ -40,7 +52,8 @@ gulp.task('watch', function() {
         server.changed(file.path);
     });
     gulp.watch(paths.scripts, ['uglify']);
+    gulp.watch(paths.jsx, ['jsx']);
     gulp.watch(paths.styles, ['stylus']);
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['uglify', 'jsx', 'stylus', 'watch']);
