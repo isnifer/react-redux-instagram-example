@@ -2,3 +2,4 @@
 .gitignore
 .module-cache
 node_modules
+index.html
