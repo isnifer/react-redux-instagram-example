@@ -164,7 +164,7 @@
     render: function() {
       return (
         <div className="user g-clf">
-          <a href={'/react/profile/' + this.props.userId} className="user__pic">
+          <a href={'#/profile/' + this.props.userId} className="user__pic">
             <img src={this.props.avatar} />
           </a>
           <span className="user__name">{this.props.username}</span>
@@ -225,7 +225,7 @@
       return (
         <li className="comments__item">
           <img src={this.props.src} className="comments__pic" />
-          <a className="comments__username" href="/react/profile/">{this.props.author}</a>:&#160;
+          <a className="comments__username" href="#/profile/">{this.props.author}</a>:&#160;
           <span className="comments__text">{this.props.text}</span>
         </li>
       );
@@ -485,13 +485,13 @@
                 <span className="profile__media-digits">{this.state.counts.media}</span>
               </li>
               <li className="profile__item">
-                <a className="profile__link_followers" href={'/react/profile/' + this.state.user.id + '/followed-by/'}>
+                <a className="profile__link_followers" href={'#/profile/' + this.state.user.id + '/followed-by/'}>
                   <span className="profile__count">Followers</span><br />
                   <span className="profile__followed_by-digits">{this.state.counts.followed_by}</span>
                 </a>
               </li>
               <li className="profile__item">
-                <a className="profile__link_followers" href={'/react/profile/' + this.state.user.id + '/follows/'}>
+                <a className="profile__link_followers" href={'#/profile/' + this.state.user.id + '/follows/'}>
                   <span className="profile__count profile__count_follow">Follow</span><br />
                   <span className="profile__follows-digits">{this.state.counts.follows}</span>
                 </a>
@@ -578,7 +578,7 @@
       var followers = this.state.followers.map(function(follower) {
         return (
           <div className="follow__item">
-            <a href={'/react/profile/' + follower.id + '/'}>
+            <a href={'#/profile/' + follower.id + '/'}>
               <img className="follow__avatar" src={follower.profile_picture} />
               <span className="follow__username">@{follower.username}</span>
             </a>
