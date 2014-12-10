@@ -680,7 +680,7 @@
     ['#/about/', 'About']
   ];
 
-  React.renderComponent(<Menu links={links} />, $header[0]);
-  React.renderComponent(<Router routes={routes} />, $main);
+  React.render(<Menu links={links} />, $header[0]);
+  React.render(<Router routes={routes} />, $main);
 
 }(window, window.React, window.jQuery, window.Grapnel));
