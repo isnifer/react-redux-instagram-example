@@ -33,7 +33,7 @@ gulp.task('jsx', function () {
 
 gulp.task('stylus', function () {
     return gulp.src('src/stylus/style.styl')
-        .pipe(stylus({use: ['nib']}))
+        .pipe(stylus())
         .pipe(csscomb())
         .pipe(gulp.dest('./assets/css'))
         .pipe(cssmin())

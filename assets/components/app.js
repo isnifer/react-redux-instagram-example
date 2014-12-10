@@ -20,7 +20,7 @@
 
   var Router = React.createClass({displayName: 'Router',
     getInitialState: function () {
-      return {component: React.DOM.div(null)}
+      return {component: React.createElement("div", null)}
     },
     componentDidMount: function () {
       var self = this;
@@ -33,7 +33,7 @@
         var router = new Grapnel();
         router.get(url, function(req){
           self.setState({ 
-            component: Component({params: req.params}) 
+            component: React.createElement(Component, {params: req.params}) 
           });    
         });
 
@@ -81,8 +81,8 @@
 
     render: function () {
       return (
-        React.DOM.div({className: "timeline"}, 
-          TimelineList({data: this.state.data})
+        React.createElement("div", {className: "timeline"}, 
+          React.createElement(TimelineList, {data: this.state.data})
         )
       );
     }
@@ -91,10 +91,10 @@
   var TimelineList = React.createClass({displayName: 'TimelineList',
     render: function () {
       var timelineitem = this.props.data.map(function (picture) {
-        return(TimelineItem({element: picture, user: picture.user, id: picture.id, type: picture.type}));
+        return(React.createElement(TimelineItem, {element: picture, user: picture.user, id: picture.id, type: picture.type}));
       });
       return (
-        React.DOM.ul({className: "feed"}, 
+        React.createElement("ul", {className: "feed"}, 
           timelineitem
         )
       );
@@ -137,12 +137,12 @@
 
     render: function () {
       var element = (this.props.type === 'video') ? 
-        TimelineVideo({src: this.props.element.videos.standard_resolution.url, id: this.props.id}) : 
-        TimelinePhoto({src: this.props.element.images.standard_resolution.url, id: this.props.id, liked: this.props.element.user_has_liked, makeLike: this.like}); 
+        React.createElement(TimelineVideo, {src: this.props.element.videos.standard_resolution.url, id: this.props.id}) : 
+        React.createElement(TimelinePhoto, {src: this.props.element.images.standard_resolution.url, id: this.props.id, liked: this.props.element.user_has_liked, makeLike: this.like}); 
 
       return (
-        React.DOM.li({className: "feed__item"}, 
-          TimelineUser({
+        React.createElement("li", {className: "feed__item"}, 
+          React.createElement(TimelineUser, {
             liked: this.state.liked, 
             userId: this.props.user.id, 
             username: this.props.user.username, 
@@ -151,9 +151,9 @@
             photoId: this.props.element.id, 
             like: this.like}
           ), 
-          React.DOM.div({className: "photo"}, 
+          React.createElement("div", {className: "photo"}, 
             element, 
-            CommentsList({comments: this.props.element.comments.data})
+            React.createElement(CommentsList, {comments: this.props.element.comments.data})
           )
         )
       );
@@ -163,12 +163,12 @@
   var TimelineUser = React.createClass({displayName: 'TimelineUser',
     render: function() {
       return (
-        React.DOM.div({className: "user g-clf"}, 
-          React.DOM.a({href: '/react/profile/' + this.props.userId, className: "user__pic"}, 
-            React.DOM.img({src: this.props.avatar})
+        React.createElement("div", {className: "user g-clf"}, 
+          React.createElement("a", {href: '#/profile/' + this.props.userId, className: "user__pic"}, 
+            React.createElement("img", {src: this.props.avatar})
           ), 
-          React.DOM.span({className: "user__name"}, this.props.username), 
-          LikeHeart({likes: this.props.likes, liked: this.props.liked, makeLike: this.props.like})
+          React.createElement("span", {className: "user__name"}, this.props.username), 
+          React.createElement(LikeHeart, {likes: this.props.likes, liked: this.props.liked, makeLike: this.props.like})
         )
       );
     }
@@ -177,9 +177,9 @@
   var LikeHeart = React.createClass({displayName: 'LikeHeart',
     render: function () {
       return (
-        React.DOM.span({className: "user__likes"}, 
-          React.DOM.i({className: this.props.liked ? 'user__like user__like_liked' : 'user__like', onClick: this.props.makeLike}), 
-          React.DOM.span({className: "user__likes-count"}, this.props.likes)
+        React.createElement("span", {className: "user__likes"}, 
+          React.createElement("i", {className: this.props.liked ? 'user__like user__like_liked' : 'user__like', onClick: this.props.makeLike}), 
+          React.createElement("span", {className: "user__likes-count"}, this.props.likes)
         )
       );
     }
@@ -192,7 +192,7 @@
 
     render: function () {
       return (
-        React.DOM.img({className: "photo__pic", id: this.props.id, src: this.props.src, onDoubleClick: this.props.makeLike}) 
+        React.createElement("img", {className: "photo__pic", id: this.props.id, src: this.props.src, onDoubleClick: this.props.makeLike}) 
       );
     }
   });
@@ -200,8 +200,8 @@
   var TimelineVideo = React.createClass({displayName: 'TimelineVideo',
     render: function () {
       return (
-        React.DOM.video({className: "photo__pic", id: this.props.id, controls: true}, 
-          React.DOM.source({src: this.props.src})
+        React.createElement("video", {className: "photo__pic", id: this.props.id, controls: true}, 
+          React.createElement("source", {src: this.props.src})
         )
       );
     }
@@ -210,10 +210,10 @@
   var CommentsList = React.createClass({displayName: 'CommentsList',
     render: function() {
       var comment = this.props.comments.map(function (comment) {
-        return(CommentsItem({src: comment.from.profile_picture, authorId: comment.from.id, author: comment.from.username, text: comment.text}));
+        return(React.createElement(CommentsItem, {src: comment.from.profile_picture, authorId: comment.from.id, author: comment.from.username, text: comment.text}));
       }); 
       return (
-        React.DOM.ul({className: "comments"}, 
+        React.createElement("ul", {className: "comments"}, 
           comment
         )
       );
@@ -223,10 +223,10 @@
   var CommentsItem = React.createClass({displayName: 'CommentsItem',
     render: function() {
       return (
-        React.DOM.li({className: "comments__item"}, 
-          React.DOM.img({src: this.props.src, className: "comments__pic"}), 
-          React.DOM.a({className: "comments__username", href: "/react/profile/"}, this.props.author), ": ", 
-          React.DOM.span({className: "comments__text"}, this.props.text)
+        React.createElement("li", {className: "comments__item"}, 
+          React.createElement("img", {src: this.props.src, className: "comments__pic"}), 
+          React.createElement("a", {className: "comments__username", href: "#/profile/"}, this.props.author), ": ", 
+          React.createElement("span", {className: "comments__text"}, this.props.text)
         )
       );
     }
@@ -308,11 +308,11 @@
     },
     render: function () {
       return (
-        React.DOM.div({className: "search"}, 
-          React.DOM.form({className: "search__form", onSubmit: this.search}, 
-            React.DOM.input({type: "text", defaultValue: this.state.query, ref: "searchInput", className: "search__input", placeholder: "Search photo by Hashtag"})
+        React.createElement("div", {className: "search"}, 
+          React.createElement("form", {className: "search__form", onSubmit: this.search}, 
+            React.createElement("input", {type: "text", defaultValue: this.state.query, ref: "searchInput", className: "search__input", placeholder: "Search photo by Hashtag"})
           ), 
-          ResultList({searchResult: this.state.data})
+          React.createElement(ResultList, {searchResult: this.state.data})
         )
       );
     }
@@ -322,15 +322,15 @@
     render: function () {
       var items = this.props.searchResult.map(function (photo) {
         return (
-          React.DOM.a({className: "photo-list__item fancybox", 
+          React.createElement("a", {className: "photo-list__item fancybox", 
              href: photo.images.standard_resolution.url, 
              title: photo.caption && photo.caption.text || ''}, 
-            React.DOM.img({src: photo.images.standard_resolution.url})
+            React.createElement("img", {src: photo.images.standard_resolution.url})
           )
         )
       });
       return (
-        React.DOM.div({className: "photo-list"}, 
+        React.createElement("div", {className: "photo-list"}, 
           items
         )
       );
@@ -368,11 +368,11 @@
     },
     render: function () {
       return (
-        React.DOM.div({className: "search"}, 
-          React.DOM.form({className: "search__form", onSubmit: this.search}, 
-            React.DOM.input({type: "text", defaultValue: this.state.query, ref: "searchInput", className: "search__input", placeholder: "Search by Username"})
+        React.createElement("div", {className: "search"}, 
+          React.createElement("form", {className: "search__form", onSubmit: this.search}, 
+            React.createElement("input", {type: "text", defaultValue: this.state.query, ref: "searchInput", className: "search__input", placeholder: "Search by Username"})
           ), 
-          PeopleList({searchResult: this.state.data})
+          React.createElement(PeopleList, {searchResult: this.state.data})
         )
       );
     }
@@ -382,15 +382,15 @@
     render: function () {
       var items = this.props.searchResult.map(function (photo) {
         return (
-          React.DOM.a({className: "photo-list__item fancybox", 
+          React.createElement("a", {className: "photo-list__item fancybox", 
              href: '#/profile/' + photo.id, 
              title: photo.username || ''}, 
-            React.DOM.img({src: photo.profile_picture})
+            React.createElement("img", {src: photo.profile_picture})
           )
         )
       });
       return (
-        React.DOM.div({className: "photo-list"}, 
+        React.createElement("div", {className: "photo-list"}, 
           items
         )
       );
@@ -404,7 +404,7 @@
   var PageNotFound = React.createClass({displayName: 'PageNotFound',
     render: function () {
       return (
-        React.DOM.div(null, "Page not found")
+        React.createElement("div", null, "Page not found")
       );
     }
   });
@@ -464,50 +464,50 @@
     render: function () {
       var photos = this.state.photos.map(function (photo) {
         return (
-          React.DOM.div({className: "photo-list__item"}, 
-            React.DOM.a({className: "fancybox", href: photo.images.standard_resolution.url}, 
-              React.DOM.img({src: photo.images.low_resolution.url, title: photo.caption && photo.caption.text || ''})
+          React.createElement("div", {className: "photo-list__item"}, 
+            React.createElement("a", {className: "fancybox", href: photo.images.standard_resolution.url}, 
+              React.createElement("img", {src: photo.images.low_resolution.url, title: photo.caption && photo.caption.text || ''})
             ), 
-            ProfileLikeCounter({count: photo.likes.count, state: photo.user_has_liked, id: photo.id})
+            React.createElement(ProfileLikeCounter, {count: photo.likes.count, state: photo.user_has_liked, id: photo.id})
           )
         );
       });
       return (
-        React.DOM.div({className: "profile"}, 
-          React.DOM.div({className: "profile__data"}, 
-            React.DOM.div({className: "profile__photo"}, 
-              React.DOM.img({src: this.state.user.profile_picture, alt: this.state.user.username, className: "profile__picture"})
+        React.createElement("div", {className: "profile"}, 
+          React.createElement("div", {className: "profile__data"}, 
+            React.createElement("div", {className: "profile__photo"}, 
+              React.createElement("img", {src: this.state.user.profile_picture, alt: this.state.user.username, className: "profile__picture"})
             ), 
-            React.DOM.div({className: "profile__username"}, this.state.user.username), 
-            React.DOM.ul({className: "profile__stats"}, 
-              React.DOM.li({className: "profile__item"}, 
-                React.DOM.span({className: "profile__count"}, "Photos"), React.DOM.br(null), 
-                React.DOM.span({className: "profile__media-digits"}, this.state.counts.media)
+            React.createElement("div", {className: "profile__username"}, this.state.user.username), 
+            React.createElement("ul", {className: "profile__stats"}, 
+              React.createElement("li", {className: "profile__item"}, 
+                React.createElement("span", {className: "profile__count"}, "Photos"), React.createElement("br", null), 
+                React.createElement("span", {className: "profile__media-digits"}, this.state.counts.media)
               ), 
-              React.DOM.li({className: "profile__item"}, 
-                React.DOM.a({className: "profile__link_followers", href: '/react/profile/' + this.state.user.id + '/followed-by/'}, 
-                  React.DOM.span({className: "profile__count"}, "Followers"), React.DOM.br(null), 
-                  React.DOM.span({className: "profile__followed_by-digits"}, this.state.counts.followed_by)
+              React.createElement("li", {className: "profile__item"}, 
+                React.createElement("a", {className: "profile__link_followers", href: '#/profile/' + this.state.user.id + '/followed-by/'}, 
+                  React.createElement("span", {className: "profile__count"}, "Followers"), React.createElement("br", null), 
+                  React.createElement("span", {className: "profile__followed_by-digits"}, this.state.counts.followed_by)
                 )
               ), 
-              React.DOM.li({className: "profile__item"}, 
-                React.DOM.a({className: "profile__link_followers", href: '/react/profile/' + this.state.user.id + '/follows/'}, 
-                  React.DOM.span({className: "profile__count profile__count_follow"}, "Follow"), React.DOM.br(null), 
-                  React.DOM.span({className: "profile__follows-digits"}, this.state.counts.follows)
+              React.createElement("li", {className: "profile__item"}, 
+                React.createElement("a", {className: "profile__link_followers", href: '#/profile/' + this.state.user.id + '/follows/'}, 
+                  React.createElement("span", {className: "profile__count profile__count_follow"}, "Follow"), React.createElement("br", null), 
+                  React.createElement("span", {className: "profile__follows-digits"}, this.state.counts.follows)
                 )
               )
             ), 
-            React.DOM.ul({className: "profile__info"}, 
-              React.DOM.li({className: "profile__item"}, this.state.user.full_name), 
-              React.DOM.li({className: "profile__item"}, this.state.user.bio), 
-              React.DOM.li({className: "profile__item"}, 
-                React.DOM.a({href: this.state.user.website, target: "_blank", className: "profile__url"}, 
+            React.createElement("ul", {className: "profile__info"}, 
+              React.createElement("li", {className: "profile__item"}, this.state.user.full_name), 
+              React.createElement("li", {className: "profile__item"}, this.state.user.bio), 
+              React.createElement("li", {className: "profile__item"}, 
+                React.createElement("a", {href: this.state.user.website, target: "_blank", className: "profile__url"}, 
                   this.state.user.website
                 )
               )
             )
           ), 
-          React.DOM.div({className: "photo-list"}, 
+          React.createElement("div", {className: "photo-list"}, 
             photos
           )
         )
@@ -527,7 +527,7 @@
     },
     render: function () {
       return (
-        React.DOM.span({className: "photo-list__likes", onClick: this.like}, "Likes: ", this.state.likes)
+        React.createElement("span", {className: "photo-list__likes", onClick: this.like}, "Likes: ", this.state.likes)
       );
     }
   });
@@ -539,7 +539,7 @@
   var About = React.createClass({displayName: 'About',
     render: function () {
       return (
-        React.DOM.div(null, "About")
+        React.createElement("div", null, "About")
       );
     }
   });
@@ -577,19 +577,19 @@
     render: function () {
       var followers = this.state.followers.map(function(follower) {
         return (
-          React.DOM.div({className: "follow__item"}, 
-            React.DOM.a({href: '/react/profile/' + follower.id + '/'}, 
-              React.DOM.img({className: "follow__avatar", src: follower.profile_picture}), 
-              React.DOM.span({className: "follow__username"}, "@", follower.username)
+          React.createElement("div", {className: "follow__item"}, 
+            React.createElement("a", {href: '#/profile/' + follower.id + '/'}, 
+              React.createElement("img", {className: "follow__avatar", src: follower.profile_picture}), 
+              React.createElement("span", {className: "follow__username"}, "@", follower.username)
             ), 
-            RelationshipButton({id: follower.id})
+            React.createElement(RelationshipButton, {id: follower.id})
           )
         );
       });
       return (
-        React.DOM.div({className: "follow"}, 
-          React.DOM.header({className: "follow__header"}, this.props.params.method === 'follows' && 'Follows' || 'Followers'), 
-          React.DOM.div({className: "follow__list"}, 
+        React.createElement("div", {className: "follow"}, 
+          React.createElement("header", {className: "follow__header"}, this.props.params.method === 'follows' && 'Follows' || 'Followers'), 
+          React.createElement("div", {className: "follow__list"}, 
             followers
           )
         )
@@ -635,7 +635,7 @@
     },
     render: function () {
       return (
-        React.DOM.button({
+        React.createElement("button", {
           className: 'follow__btn ' + (this.state.status === 'none' ? 'follow__btn_read' : 'follow__btn_unread'), 
           onClick: this.changeRelationship}, 
           this.state.status === 'none' ? 'Follow' : 'Unfollow'
@@ -651,10 +651,10 @@
   var Menu = React.createClass({displayName: 'Menu',
     render: function () {
       var links = this.props.links.map(function (link) {
-        return (React.DOM.li({className: "menu__item"}, React.DOM.a({className: "menu__link", href: (link[1] === 'Profile') ? link[0] + userId + '/' : link[0]}, link[1])));
+        return (React.createElement("li", {className: "menu__item"}, React.createElement("a", {className: "menu__link", href: (link[1] === 'Profile') ? link[0] + userId + '/' : link[0]}, link[1])));
       });
       return (
-        React.DOM.ul({className: "menu g-clf"}, 
+        React.createElement("ul", {className: "menu g-clf"}, 
           links
         )
       ); 
@@ -680,7 +680,7 @@
     ['#/about/', 'About']
   ];
 
-  React.renderComponent(Menu({links: links}), $header[0]);
-  React.renderComponent(Router({routes: routes}), $main);
+  React.renderComponent(React.createElement(Menu, {links: links}), $header[0]);
+  React.renderComponent(React.createElement(Router, {routes: routes}), $main);
 
 }(window, window.React, window.jQuery, window.Grapnel));
