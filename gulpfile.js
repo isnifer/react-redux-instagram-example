@@ -1,11 +1,11 @@
-var gulp = require('gulp'),
-    stylus = require('gulp-stylus'),
-    uglify = require('gulp-uglify'),
-    csscomb = require('gulp-csscomb'),
-    cssmin = require('gulp-csso'),
-    rename = require('gulp-rename'),
-    livereload = require('gulp-livereload')
-    react = require('gulp-react');
+var gulp = require('gulp');
+var stylus = require('gulp-stylus');
+var uglify = require('gulp-uglify');
+var csscomb = require('gulp-csscomb');
+var cssmin = require('gulp-csso');
+var rename = require('gulp-rename');
+var livereload = require('gulp-livereload');
+var react = require('gulp-react');
 
 var paths = {
     scripts: 'src/js/*.js',
@@ -38,8 +38,8 @@ gulp.task('stylus', function () {
         .pipe(gulp.dest('./assets/css'))
         .pipe(cssmin())
         .pipe(rename({
-            basename: 'style', 
-            suffix: '.min', 
+            basename: 'style',
+            suffix: '.min',
             ext: '.css'
         }))
         .pipe(gulp.dest('./assets/css'))

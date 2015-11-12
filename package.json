@@ -1,23 +1,42 @@
 {
-  "name": "GulpBoilerplate",
-  "version": "0.0.1",
-  "main": "gulpfile.js",
-  "author": "isnifer",
-  "description": "Gulp Boilerplate",
+  "name": "ReactInstagramApp",
+  "version": "1.0.0",
+  "main": "bundle.js",
+  "author": "Anton Kuznetsov <isnifer@gmail.com> (https://github.com/isnifer)",
+  "description": "React Redux Instagram App",
   "homepage": "http://isnifer.me",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iSnifer/grunt-boilerplate.git"
+    "url": "git@github.com:isnifer/InstaAngular.git"
   },
   "devDependencies": {
+    "babel-loader": "^6.0.1",
+    "css-loader": "^0.21.0",
     "gulp": "latest",
-    "gulp-stylus": "latest",
-    "gulp-uglify": "latest",
     "gulp-csscomb": "latest",
     "gulp-csso": "latest",
-    "gulp-rename": "latest",
     "gulp-livereload": "latest",
-    "gulp-react": "latest"
+    "gulp-react": "latest",
+    "gulp-rename": "latest",
+    "gulp-stylus": "latest",
+    "gulp-uglify": "latest",
+    "style-loader": "^0.13.0",
+    "stylus-loader": "^1.4.2",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.1"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.0.15",
+    "babel-preset-react": "^6.0.15",
+    "babel-preset-stage-0": "^6.0.15",
+    "history": "^1.13.0",
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2",
+    "react-redux": "^4.0.0",
+    "react-router": "^1.0.0-rc4",
+    "redux": "^3.0.4",
+    "redux-logger": "^2.0.4",
+    "redux-thunk": "^1.0.0"
   }
 }
