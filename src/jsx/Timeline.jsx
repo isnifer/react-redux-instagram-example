@@ -96,8 +96,10 @@ const TimelineItem = ({element, id, type, user}) => {
 }
 
 class Timeline extends Component {
-    constructor (props, context) {
-        super(props, context);
+
+    static propTypes = {
+        model: PropTypes.object.isRequired,
+        dispatch: PropTypes.func.isRequired
     }
 
     componentDidMount () {
@@ -137,11 +139,6 @@ class Timeline extends Component {
             </div>
         );
     }
-}
-
-Timeline.propTypes = {
-    model: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
 }
 
 export default connect(state => ({

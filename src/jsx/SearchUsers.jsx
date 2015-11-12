@@ -6,8 +6,10 @@ import { connect } from 'react-redux';
 import { searchByUserAction } from '../app/actions';
 
 class SearchUsers extends Component {
-    constructor (props) {
-        super(props);
+
+    static propTypes = {
+        model: PropTypes.object.isRequired,
+        dispatch: PropTypes.func.isRequired
     }
 
     search (event) {
@@ -46,11 +48,6 @@ class SearchUsers extends Component {
             </div>
         );
     }
-}
-
-SearchUsers.propTypes = {
-    model: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
 }
 
 export default connect(state => ({

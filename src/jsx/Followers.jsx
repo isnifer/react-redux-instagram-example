@@ -8,6 +8,11 @@ import { getFollowersAction, updateFollowersAction } from '../app/actions';
 
 class Followers extends Component {
 
+    static propTypes = {
+        model: PropTypes.object.isRequired,
+        dispatch: PropTypes.func.isRequired
+    }
+
     componentDidMount () {
         const userId = this.props.params.id;
         const type = this.props.route.name;
@@ -39,35 +44,6 @@ class Followers extends Component {
             </div>
         );
     }
-}
-
-// <RelationshipButton id={follower.id} />
-// class RelationshipButton extends Component {
-//     constructor (props) {
-//         super(props);
-
-//         this.state = {
-//             status: ''
-//         };
-//     }
-
-//     componentDidMount () {
-//         this.getRelationshipStatus();
-//     }
-
-//     render () {
-//         return (
-//             <button
-//                 className={'follow__btn ' + (this.state.status === 'none' ? 'follow__btn_read' : 'follow__btn_unread')}>
-//                 {this.state.status === 'none' ? 'Follow' : 'Unfollow'}
-//             </button>
-//         );
-//     }
-// }
-
-Followers.propTypes = {
-    model: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
 }
 
 export default connect(state => ({

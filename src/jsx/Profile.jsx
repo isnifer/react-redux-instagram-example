@@ -7,8 +7,10 @@ import { loadOnScrollBottom } from '../helpers';
 import { getProfileDataAction, getProfilePhotosAction, updateProfilePhotosAction } from '../app/actions';
 
 class Profile extends Component {
-    constructor (props) {
-        super(props);
+
+    static propTypes = {
+        model: PropTypes.object.isRequired,
+        dispatch: PropTypes.func.isRequired
     }
 
     componentDidMount () {
@@ -102,11 +104,6 @@ class Profile extends Component {
             </div>
         );
     }
-}
-
-Profile.propTypes = {
-    model: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
 }
 
 export default connect(state => ({

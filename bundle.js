@@ -60,40 +60,43 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _App = __webpack_require__(233);
+	var _App = __webpack_require__(237);
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Timeline = __webpack_require__(234);
+	var _Timeline = __webpack_require__(238);
 
 	var _Timeline2 = _interopRequireDefault(_Timeline);
 
-	var _SearchPhotos = __webpack_require__(235);
+	var _SearchPhotos = __webpack_require__(247);
 
 	var _SearchPhotos2 = _interopRequireDefault(_SearchPhotos);
 
-	var _SearchUsers = __webpack_require__(236);
+	var _SearchUsers = __webpack_require__(248);
 
 	var _SearchUsers2 = _interopRequireDefault(_SearchUsers);
 
-	var _Profile = __webpack_require__(237);
+	var _Profile = __webpack_require__(249);
 
 	var _Profile2 = _interopRequireDefault(_Profile);
 
-	var _Followers = __webpack_require__(239);
+	var _Followers = __webpack_require__(250);
 
 	var _Followers2 = _interopRequireDefault(_Followers);
 
-	var _timeline = __webpack_require__(240);
+	var _PageNotFound = __webpack_require__(251);
+
+	var _PageNotFound2 = _interopRequireDefault(_PageNotFound);
+
+	var _timeline = __webpack_require__(241);
 
 	var _timeline2 = _interopRequireDefault(_timeline);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var token = localStorage.accessToken;
-
 	// Page handlers
 
+	var token = localStorage.accessToken;
 	var userId = localStorage.userId;
 
 	(0, _reactDom.render)(_react2.default.createElement(
@@ -111,7 +114,8 @@
 	            _react2.default.createElement(_reactRouter.Route, { path: 'users', name: 'People', component: _SearchUsers2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'profile/:id', name: 'Profile', component: _Profile2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: 'followed-by/:id', name: 'followed-by', component: _Followers2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: 'follows/:id', name: 'follows', component: _Followers2.default })
+	            _react2.default.createElement(_reactRouter.Route, { path: 'follows/:id', name: 'follows', component: _Followers2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '*', name: 'not-found', component: _PageNotFound2.default })
 	        )
 	    )
 	), document.querySelector('.page'));
@@ -25604,11 +25608,11 @@
 
 	var _redux = __webpack_require__(216);
 
-	var _reduxLogger = __webpack_require__(231);
+	var _reduxLogger = __webpack_require__(235);
 
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
-	var _reduxThunk = __webpack_require__(232);
+	var _reduxThunk = __webpack_require__(236);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
@@ -25635,13 +25639,13 @@
 
 	var _timeline = __webpack_require__(229);
 
-	var _profile = __webpack_require__(243);
+	var _profile = __webpack_require__(231);
 
-	var _searchByUser = __webpack_require__(247);
+	var _searchByUser = __webpack_require__(232);
 
-	var _searchByTag = __webpack_require__(249);
+	var _searchByTag = __webpack_require__(233);
 
-	var _followers = __webpack_require__(251);
+	var _followers = __webpack_require__(234);
 
 	var rootReducer = (0, _redux.combineReducers)({
 
@@ -25775,6 +25779,247 @@
 
 /***/ },
 /* 231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.profileError = exports.profilePagination = exports.profilePhotos = exports.profileLoaded = exports.counts = exports.profile = undefined;
+
+	var _constants = __webpack_require__(230);
+
+	var initialState = {
+	    profile: {},
+	    counts: {},
+	    profileLoaded: false,
+	    profilePhotos: [],
+	    profilePagination: {},
+	    profileError: null
+	};
+
+	var profile = exports.profile = function profile() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profile : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.GET_PROFILE_RESPONSE:
+	            return action.payload.profile || {};
+	        case _constants.GET_PROFILE_REQUEST:
+	        default:
+	            return state;
+	    }
+	};
+
+	var counts = exports.counts = function counts() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.counts : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.GET_PROFILE_RESPONSE:
+	            return action.payload.counts;
+	        case _constants.GET_PROFILE_REQUEST:
+	        default:
+	            return state;
+	    }
+	};
+
+	var profileLoaded = exports.profileLoaded = function profileLoaded() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profileLoaded : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.GET_PROFILE_RESPONSE:
+	        case _constants.GET_PROFILE_REQUEST:
+	            return action.payload.profileLoaded;
+	        default:
+	            return state;
+	    }
+	};
+
+	var profilePhotos = exports.profilePhotos = function profilePhotos() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profilePhotos : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.UPDATE_PROFILE_PHOTOS_RESPONSE:
+	            return state.concat(action.payload.profilePhotos);
+	        case _constants.GET_PROFILE_PHOTOS_RESPONSE:
+	            return action.payload.profilePhotos;
+	        case _constants.GET_PROFILE_PHOTOS_REQUEST:
+	            return initialState.profilePhotos;
+	        default:
+	            return state;
+	    }
+	};
+
+	var profilePagination = exports.profilePagination = function profilePagination() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profilePagination : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.GET_PROFILE_PHOTOS_RESPONSE:
+	        case _constants.UPDATE_PROFILE_PHOTOS_RESPONSE:
+	            return action.payload.profilePagination;
+	        case _constants.GET_PROFILE_PHOTOS_REQUEST:
+	        default:
+	            return state;
+	    }
+	};
+
+	var profileError = exports.profileError = function profileError() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profileError : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.GET_PROFILE_PHOTOS_RESPONSE:
+	        case _constants.UPDATE_PROFILE_PHOTOS_RESPONSE:
+	            return action.payload.profileError;
+	        case _constants.GET_PROFILE_PHOTOS_REQUEST:
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 232 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.foundedUsers = undefined;
+
+	var _constants = __webpack_require__(230);
+
+	var foundedUsers = exports.foundedUsers = function foundedUsers() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.SEARCH_BY_USER_RESPONSE:
+	            return action.payload.foundedUsers;
+	        case _constants.SEARCH_BY_USER_REQUEST:
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 233 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.deniedTag = exports.searchPagination = exports.foundedPhotos = undefined;
+
+	var _constants = __webpack_require__(230);
+
+	var initialState = {
+	    foundedPhotos: [],
+	    searchPagination: {},
+	    deniedTag: false
+	};
+
+	var foundedPhotos = exports.foundedPhotos = function foundedPhotos() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.foundedPhotos : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.SEARCH_BY_TAG_RESPONSE:
+	        case _constants.GET_POPULAR_RESPONSE:
+
+	            // If we try to find denied tag like: xxx, booty, etc
+	            // we will not get anything here
+	            // and we will simply return empty array
+	            return action.payload.foundedPhotos || [];
+	        case _constants.GET_POPULAR_REQUEST:
+	        case _constants.SEARCH_BY_TAG_REQUEST:
+	        default:
+	            return state;
+	    }
+	};
+
+	var searchPagination = exports.searchPagination = function searchPagination() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.searchPagination : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.SEARCH_BY_TAG_RESPONSE:
+
+	            // If we try to find denied tag like: xxx, booty, etc
+	            // we will not get anything here
+	            // and we will simply return empty array
+	            return action.payload.searchPagination || [];
+	        case _constants.SEARCH_BY_TAG_REQUEST:
+	        default:
+	            return state;
+	    }
+	};
+
+	var deniedTag = exports.deniedTag = function deniedTag() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.deniedTag : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.SEARCH_BY_TAG_RESPONSE:
+	            return action.payload.deniedTag;
+	        case _constants.SEARCH_BY_TAG_REQUEST:
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.followersPagination = exports.followers = undefined;
+
+	var _constants = __webpack_require__(230);
+
+	var followers = exports.followers = function followers() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.GET_FOLLOWERS_REQUEST:
+	        case _constants.GET_FOLLOWERS_RESPONSE:
+	            return action.payload.followers;
+	        case _constants.UPDATE_FOLLOWERS_RESPONSE:
+	            return action.payload.followers.concat(action.payload.followers);
+	        default:
+	            return state;
+	    }
+	};
+
+	var followersPagination = exports.followersPagination = function followersPagination() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case _constants.GET_FOLLOWERS_REQUEST:
+	        case _constants.GET_FOLLOWERS_RESPONSE:
+	        case _constants.UPDATE_FOLLOWERS_RESPONSE:
+	            return action.payload.followersPagination;
+	        default:
+	            return state;
+	    }
+	};
+
+/***/ },
+/* 235 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -25894,7 +26139,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 232 */
+/* 236 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25916,12 +26161,10 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 233 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -25935,106 +26178,88 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 	var userId = localStorage.userId;
 
-	var App = (function (_React$Component) {
-	    _inherits(App, _React$Component);
+	var App = function App(_ref) {
+	    var routes = _ref.routes;
+	    var children = _ref.children;
 
-	    function App(props, context) {
-	        _classCallCheck(this, App);
+	    var links = routes[0].childRoutes.slice(0, 4).map(function (link, i) {
+	        return _react2.default.createElement(
+	            'li',
+	            { className: 'menu__item', key: i },
+	            _react2.default.createElement(
+	                _reactRouter.Link,
+	                {
+	                    className: 'menu__link',
+	                    to: link.path === 'profile/:id' ? link.path.replace(':id', userId) : link.path },
+	                link.name
+	            )
+	        );
+	    });
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props, context));
-	    }
-
-	    _createClass(App, [{
-	        key: 'render',
-	        value: function render() {
-	            var links = this.props.routes[0].childRoutes.slice(0, 4).map(function (link, i) {
-	                return _react2.default.createElement(
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	            'header',
+	            { className: 'header' },
+	            _react2.default.createElement(
+	                'ul',
+	                { className: 'menu g-clf' },
+	                links
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'main g-clf' },
+	            children
+	        ),
+	        _react2.default.createElement(
+	            'footer',
+	            { className: 'footer' },
+	            _react2.default.createElement(
+	                'ul',
+	                { className: 'social' },
+	                _react2.default.createElement(
 	                    'li',
-	                    { className: 'menu__item', key: i },
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        {
-	                            className: 'menu__link',
-	                            to: link.path === 'profile/:id' ? link.path.replace(':id', userId) : link.path },
-	                        link.name
-	                    )
-	                );
-	            });
-
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(
-	                    'header',
-	                    { className: 'header' },
-	                    _react2.default.createElement(
-	                        'ul',
-	                        { className: 'menu g-clf' },
-	                        links
-	                    )
+	                    { className: 'social__item' },
+	                    _react2.default.createElement('a', { className: 'social__link icon-facebook', href: 'https://facebook.com/isnifee' })
 	                ),
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'main g-clf' },
-	                    this.props.children
+	                    'li',
+	                    { className: 'social__item' },
+	                    _react2.default.createElement('a', { className: 'social__link icon-twitter', href: 'https://twitter.com/isnifer' })
 	                ),
 	                _react2.default.createElement(
-	                    'footer',
-	                    { className: 'footer' },
-	                    _react2.default.createElement(
-	                        'ul',
-	                        { className: 'social' },
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'social__item' },
-	                            _react2.default.createElement('a', { className: 'social__link icon-facebook', href: 'https://facebook.com/isnifee' })
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'social__item' },
-	                            _react2.default.createElement('a', { className: 'social__link icon-twitter', href: 'https://twitter.com/isnifer' })
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'social__item' },
-	                            _react2.default.createElement('a', { className: 'social__link icon-VK', href: 'https://vk.com/isnifer' })
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'social__item' },
-	                            _react2.default.createElement('a', { className: 'social__link icon-GitHub-circle', href: 'https://github.com/isnifer' })
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'footer__copyright' },
-	                        '© Anton Kuznetsov',
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'footer__rights' },
-	                            '. Instagram App. All rights on left!'
-	                        )
-	                    )
+	                    'li',
+	                    { className: 'social__item' },
+	                    _react2.default.createElement('a', { className: 'social__link icon-VK', href: 'https://vk.com/isnifer' })
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    { className: 'social__item' },
+	                    _react2.default.createElement('a', { className: 'social__link icon-GitHub-circle', href: 'https://github.com/isnifer' })
 	                )
-	            );
-	        }
-	    }]);
-
-	    return App;
-	})(_react2.default.Component);
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'footer__copyright' },
+	                '© Anton Kuznetsov',
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'footer__rights' },
+	                    '. Instagram App. All rights on left!'
+	                )
+	            )
+	        )
+	    );
+	};
 
 	exports.default = App;
 
 /***/ },
-/* 234 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26051,9 +26276,9 @@
 
 	var _reactRedux = __webpack_require__(209);
 
-	var _helpers = __webpack_require__(238);
+	var _helpers = __webpack_require__(239);
 
-	var _actions = __webpack_require__(244);
+	var _actions = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26199,10 +26424,10 @@
 	var Timeline = (function (_Component) {
 	    _inherits(Timeline, _Component);
 
-	    function Timeline(props, context) {
+	    function Timeline() {
 	        _classCallCheck(this, Timeline);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Timeline).call(this, props, context));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Timeline).apply(this, arguments));
 	    }
 
 	    _createClass(Timeline, [{
@@ -26256,7 +26481,6 @@
 	    model: _react.PropTypes.object.isRequired,
 	    dispatch: _react.PropTypes.func.isRequired
 	};
-
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        model: {
@@ -26268,7 +26492,530 @@
 	})(Timeline);
 
 /***/ },
-/* 235 */
+/* 239 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var loadOnScrollBottom = exports.loadOnScrollBottom = function loadOnScrollBottom(_ref) {
+	    var dispatch = _ref.dispatch;
+	    var action = _ref.action;
+	    var userId = _ref.userId;
+	    var that = _ref.that;
+
+	    $(window).off('scroll');
+	    $(window).on('scroll', function () {
+	        if ($(this).scrollTop() + $(this).height() == $(document).height()) {
+	            dispatch(action({ url: that.props.model.pagination.next_url, userId: userId }));
+	        }
+	    });
+	};
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _timeline = __webpack_require__(241);
+
+	Object.defineProperty(exports, 'getTimelineAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _timeline.getTimelineAction;
+	  }
+	});
+	Object.defineProperty(exports, 'updateTimelineAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _timeline.updateTimelineAction;
+	  }
+	});
+
+	var _profile = __webpack_require__(243);
+
+	Object.defineProperty(exports, 'getProfileDataAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _profile.getProfileDataAction;
+	  }
+	});
+	Object.defineProperty(exports, 'getProfilePhotosAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _profile.getProfilePhotosAction;
+	  }
+	});
+	Object.defineProperty(exports, 'updateProfilePhotosAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _profile.updateProfilePhotosAction;
+	  }
+	});
+
+	var _searchByUser = __webpack_require__(244);
+
+	Object.defineProperty(exports, 'searchByUserAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _searchByUser.searchByUserAction;
+	  }
+	});
+
+	var _searchByTag = __webpack_require__(245);
+
+	Object.defineProperty(exports, 'searchByTagAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _searchByTag.searchByTagAction;
+	  }
+	});
+	Object.defineProperty(exports, 'getPopularAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _searchByTag.getPopularAction;
+	  }
+	});
+
+	var _followers = __webpack_require__(246);
+
+	Object.defineProperty(exports, 'getFollowersAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _followers.getFollowersAction;
+	  }
+	});
+	Object.defineProperty(exports, 'updateFollowersAction', {
+	  enumerable: true,
+	  get: function get() {
+	    return _followers.updateFollowersAction;
+	  }
+	});
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.updateTimelineAction = exports.getTimelineAction = undefined;
+
+	var _api = __webpack_require__(242);
+
+	var _constants = __webpack_require__(230);
+
+	var token = localStorage.accessToken;
+	var userId = localStorage.userId;
+
+	var getTimelineAction = exports.getTimelineAction = function getTimelineAction(_ref) {
+	    var url = _ref.url;
+	    return function (dispatch, getState) {
+
+	        dispatch({
+	            type: _constants.GET_TIMELINE_REQUEST,
+	            payload: {
+	                timelineLoaded: false
+	            }
+	        });
+
+	        (0, _api.getTimeline)({ url: url, token: token }).then(function (payload) {
+	            dispatch({
+	                type: _constants.GET_TIMELINE_RESPONSE,
+	                payload: {
+	                    timelineItems: payload.data,
+	                    pagination: payload.pagination,
+	                    timelineLoaded: true
+	                }
+	            });
+	        });
+	    };
+	};
+
+	var updateTimelineAction = exports.updateTimelineAction = function updateTimelineAction(_ref2) {
+	    var url = _ref2.url;
+	    return function (dispatch, getState) {
+
+	        (0, _api.getTimeline)({ url: url, token: token }).then(function (payload) {
+	            dispatch({
+	                type: _constants.UPDATE_TIMELINE_RESPONSE,
+	                payload: {
+	                    timelineItems: payload.data,
+	                    pagination: payload.pagination
+	                }
+	            });
+	        });
+	    };
+	};
+
+/***/ },
+/* 242 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var dataType = 'jsonp';
+
+	var getFollowers = exports.getFollowers = function getFollowers(_ref) {
+	    var url = _ref.url;
+	    var userId = _ref.userId;
+	    var type = _ref.type;
+	    var token = _ref.token;
+
+	    var defaultUrl = 'https://api.instagram.com/v1/users/' + userId + '/' + type + '?access_token=' + token;
+	    return $.ajax({ url: url || defaultUrl, dataType: dataType }).then(function (payload) {
+	        return {
+	            followers: payload.data,
+	            followersPagination: payload.pagination
+	        };
+	    });
+	};
+
+	var getRelationshipStatus = exports.getRelationshipStatus = function getRelationshipStatus(_ref2) {
+	    var follower = _ref2.follower;
+	    var callback = _ref2.callback;
+	    var id = _ref2.id;
+	    var token = _ref2.token;
+
+	    var url = 'https://api.instagram.com/v1/users/' + id + '/relationship?access_token=' + token;
+	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
+	        return {
+	            outgoingStatus: data.data.outgoing_status
+	        };
+	    });
+	};
+
+	var getProfileData = exports.getProfileData = function getProfileData(_ref3) {
+	    var userId = _ref3.userId;
+	    var token = _ref3.token;
+
+	    var url = 'https://api.instagram.com/v1/users/' + userId + '?access_token=' + token;
+	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
+	        if (payload.meta.code !== 200) {
+	            return {
+	                profile: {},
+	                counts: {},
+	                profileError: payload.meta.error_message
+	            };
+	        }
+
+	        return {
+	            profile: payload.data,
+	            counts: payload.data.counts,
+	            profileError: null
+	        };
+	    });
+	};
+
+	var getProfilePhotos = exports.getProfilePhotos = function getProfilePhotos(_ref4) {
+	    var url = _ref4.url;
+	    var userId = _ref4.userId;
+	    var token = _ref4.token;
+
+	    var defaultUrl = 'https://api.instagram.com/v1/users/' + userId + '/media/recent?access_token=' + token;
+
+	    return $.ajax({ url: url || defaultUrl, dataType: dataType }).then(function (payload) {
+	        if (payload.meta.code !== 200) {
+	            return {
+	                profilePhotos: [],
+	                profilePagination: {},
+	                profileError: payload.meta.error_message
+	            };
+	        }
+
+	        return {
+	            profilePhotos: payload.data,
+	            profilePagination: payload.pagination,
+	            profileError: null
+	        };
+	    });
+	};
+
+	var searchByTag = exports.searchByTag = function searchByTag(_ref5) {
+	    var tag = _ref5.tag;
+	    var token = _ref5.token;
+
+	    var url = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent?&access_token=' + token;
+
+	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
+	        if (payload.meta.code !== 200) {
+	            return {
+	                deniedTag: true
+	            };
+	        }
+
+	        return {
+	            foundedPhotos: payload.data,
+	            searchPagination: payload.pagination,
+	            deniedTag: false
+	        };
+	    });
+	};
+
+	var getPopular = exports.getPopular = function getPopular(_ref6) {
+	    var token = _ref6.token;
+
+	    var url = 'https://api.instagram.com/v1/media/popular/?access_token=' + token;
+	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
+	        return {
+	            foundedPhotos: payload.data
+	        };
+	    });
+	};
+
+	var searchByUser = exports.searchByUser = function searchByUser(_ref7) {
+	    var username = _ref7.username;
+	    var token = _ref7.token;
+
+	    var url = 'https://api.instagram.com/v1/users/search?q=' + username + '&access_token=' + token;
+
+	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
+	        return {
+	            foundedUsers: payload.data
+	        };
+	    });
+	};
+
+	var getTimeline = exports.getTimeline = function getTimeline(_ref8) {
+	    var url = _ref8.url;
+	    var token = _ref8.token;
+
+	    var timelineUrl = 'https://api.instagram.com/v1/users/self/feed?access_token=' + token;
+	    return $.ajax({ url: url || timelineUrl, dataType: dataType });
+	};
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.updateProfilePhotosAction = exports.getProfilePhotosAction = exports.getProfileDataAction = undefined;
+
+	var _api = __webpack_require__(242);
+
+	var _constants = __webpack_require__(230);
+
+	var token = localStorage.accessToken;
+
+	var getProfileDataAction = exports.getProfileDataAction = function getProfileDataAction(_ref) {
+	    var url = _ref.url;
+	    var userId = _ref.userId;
+	    return function (dispatch, getState) {
+	        dispatch({
+	            type: _constants.GET_PROFILE_REQUEST,
+	            payload: {
+	                profileLoaded: false,
+	                profileError: null
+	            }
+	        });
+
+	        (0, _api.getProfileData)({ userId: userId, token: token }).then(function (payload) {
+	            payload.profileLoaded = true;
+
+	            dispatch({
+	                type: _constants.GET_PROFILE_RESPONSE,
+	                payload: payload
+	            });
+	        });
+	    };
+	};
+
+	var getProfilePhotosAction = exports.getProfilePhotosAction = function getProfilePhotosAction(_ref2) {
+	    var url = _ref2.url;
+	    var userId = _ref2.userId;
+	    return function (dispatch, getState) {
+	        dispatch({
+	            type: _constants.GET_PROFILE_PHOTOS_REQUEST,
+	            profileError: null
+	        });
+
+	        (0, _api.getProfilePhotos)({ url: url, userId: userId, token: token }).then(function (payload) {
+	            dispatch({
+	                type: _constants.GET_PROFILE_PHOTOS_RESPONSE,
+	                payload: payload
+	            });
+	        });
+	    };
+	};
+
+	var updateProfilePhotosAction = exports.updateProfilePhotosAction = function updateProfilePhotosAction(_ref3) {
+	    var url = _ref3.url;
+	    var userId = _ref3.userId;
+	    return function (dispatch, getState) {
+	        dispatch({
+	            type: _constants.UPDATE_PROFILE_PHOTOS_REQUEST
+	        });
+
+	        (0, _api.getProfilePhotos)({ url: url, userId: userId, token: token }).then(function (payload) {
+	            dispatch({
+	                type: _constants.UPDATE_PROFILE_PHOTOS_RESPONSE,
+	                payload: payload
+	            });
+	        });
+	    };
+	};
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.searchByUserAction = undefined;
+
+	var _api = __webpack_require__(242);
+
+	var _constants = __webpack_require__(230);
+
+	var token = localStorage.accessToken;
+
+	var searchByUserAction = exports.searchByUserAction = function searchByUserAction(username) {
+	    return function (dispatch, getState) {
+
+	        username = username.replace(/\s/, '');
+
+	        dispatch({
+	            type: _constants.SEARCH_BY_USER_REQUEST
+	        });
+
+	        (0, _api.searchByUser)({ username: username, token: token }).then(function (payload) {
+	            dispatch({
+	                type: _constants.SEARCH_BY_USER_RESPONSE,
+	                payload: payload
+	            });
+	        });
+	    };
+	};
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.getPopularAction = exports.searchByTagAction = undefined;
+
+	var _api = __webpack_require__(242);
+
+	var _constants = __webpack_require__(230);
+
+	var token = localStorage.accessToken;
+
+	var searchByTagAction = exports.searchByTagAction = function searchByTagAction(tag) {
+	    return function (dispatch, getState) {
+
+	        tag = tag.replace(/\s/, '');
+
+	        dispatch({
+	            type: _constants.SEARCH_BY_TAG_REQUEST
+	        });
+
+	        (0, _api.searchByTag)({ tag: tag, token: token }).then(function (payload) {
+	            dispatch({
+	                type: _constants.SEARCH_BY_TAG_RESPONSE,
+	                payload: payload
+	            });
+	        });
+	    };
+	};
+
+	var getPopularAction = exports.getPopularAction = function getPopularAction() {
+	    return function (dispatch, getState) {
+
+	        dispatch({
+	            type: _constants.GET_POPULAR_REQUEST
+	        });
+
+	        (0, _api.getPopular)({ token: token }).then(function (payload) {
+	            dispatch({
+	                type: _constants.GET_POPULAR_RESPONSE,
+	                payload: payload
+	            });
+	        });
+	    };
+	};
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.updateFollowersAction = exports.getFollowersAction = undefined;
+
+	var _api = __webpack_require__(242);
+
+	var _constants = __webpack_require__(230);
+
+	var token = localStorage.accessToken;
+
+	var getFollowersAction = exports.getFollowersAction = function getFollowersAction(_ref) {
+	    var url = _ref.url;
+	    var userId = _ref.userId;
+	    var type = _ref.type;
+	    return function (dispatch, getState) {
+	        dispatch({
+	            type: _constants.GET_FOLLOWERS_REQUEST,
+	            payload: {
+	                followers: [],
+	                followersPagination: {}
+	            }
+	        });
+
+	        (0, _api.getFollowers)({ url: url, userId: userId, type: type, token: token }).then(function (payload) {
+	            dispatch({
+	                type: _constants.GET_FOLLOWERS_RESPONSE,
+	                payload: payload
+	            });
+	        });
+	    };
+	};
+
+	var updateFollowersAction = exports.updateFollowersAction = function updateFollowersAction(_ref2) {
+	    var url = _ref2.url;
+	    var userId = _ref2.userId;
+	    var type = _ref2.type;
+	    return function (dispatch, getState) {
+	        dispatch({
+	            type: _constants.UPDATE_FOLLOWERS_REQUEST
+	        });
+
+	        (0, _api.getFollowers)({ url: url, userId: userId, type: type, token: token }).then(function (payload) {
+	            dispatch({
+	                type: _constants.UPDATE_FOLLOWERS_RESPONSE,
+	                payload: payload
+	            });
+	        });
+	    };
+	};
+
+/***/ },
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26285,7 +27032,7 @@
 
 	var _reactRedux = __webpack_require__(209);
 
-	var _actions = __webpack_require__(244);
+	var _actions = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26396,7 +27143,6 @@
 	    model: _react.PropTypes.object.isRequired,
 	    dispatch: _react.PropTypes.func.isRequired
 	};
-
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        model: {
@@ -26408,7 +27154,7 @@
 	})(SearchPhotos);
 
 /***/ },
-/* 236 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26427,7 +27173,7 @@
 
 	var _reactRedux = __webpack_require__(209);
 
-	var _actions = __webpack_require__(244);
+	var _actions = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26442,10 +27188,10 @@
 	var SearchUsers = (function (_Component) {
 	    _inherits(SearchUsers, _Component);
 
-	    function SearchUsers(props) {
+	    function SearchUsers() {
 	        _classCallCheck(this, SearchUsers);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(SearchUsers).call(this, props));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(SearchUsers).apply(this, arguments));
 	    }
 
 	    _createClass(SearchUsers, [{
@@ -26501,7 +27247,6 @@
 	    model: _react.PropTypes.object.isRequired,
 	    dispatch: _react.PropTypes.func.isRequired
 	};
-
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        model: {
@@ -26511,7 +27256,7 @@
 	})(SearchUsers);
 
 /***/ },
-/* 237 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26530,9 +27275,9 @@
 
 	var _reactRedux = __webpack_require__(209);
 
-	var _helpers = __webpack_require__(238);
+	var _helpers = __webpack_require__(239);
 
-	var _actions = __webpack_require__(244);
+	var _actions = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26547,10 +27292,10 @@
 	var Profile = (function (_Component) {
 	    _inherits(Profile, _Component);
 
-	    function Profile(props) {
+	    function Profile() {
 	        _classCallCheck(this, Profile);
 
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Profile).call(this, props));
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Profile).apply(this, arguments));
 	    }
 
 	    _createClass(Profile, [{
@@ -26734,7 +27479,6 @@
 	    model: _react.PropTypes.object.isRequired,
 	    dispatch: _react.PropTypes.func.isRequired
 	};
-
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        model: {
@@ -26748,30 +27492,7 @@
 	})(Profile);
 
 /***/ },
-/* 238 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var loadOnScrollBottom = exports.loadOnScrollBottom = function loadOnScrollBottom(_ref) {
-	    var dispatch = _ref.dispatch;
-	    var action = _ref.action;
-	    var userId = _ref.userId;
-	    var that = _ref.that;
-
-	    $(window).off('scroll');
-	    $(window).on('scroll', function () {
-	        if ($(this).scrollTop() + $(this).height() == $(document).height()) {
-	            dispatch(action({ url: that.props.model.pagination.next_url, userId: userId }));
-	        }
-	    });
-	};
-
-/***/ },
-/* 239 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26790,9 +27511,9 @@
 
 	var _reactRedux = __webpack_require__(209);
 
-	var _helpers = __webpack_require__(238);
+	var _helpers = __webpack_require__(239);
 
-	var _actions = __webpack_require__(244);
+	var _actions = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26863,35 +27584,10 @@
 	    return Followers;
 	})(_react.Component);
 
-	// <RelationshipButton id={follower.id} />
-	// class RelationshipButton extends Component {
-	//     constructor (props) {
-	//         super(props);
-
-	//         this.state = {
-	//             status: ''
-	//         };
-	//     }
-
-	//     componentDidMount () {
-	//         this.getRelationshipStatus();
-	//     }
-
-	//     render () {
-	//         return (
-	//             <button
-	//                 className={'follow__btn ' + (this.state.status === 'none' ? 'follow__btn_read' : 'follow__btn_unread')}>
-	//                 {this.state.status === 'none' ? 'Follow' : 'Unfollow'}
-	//             </button>
-	//         );
-	//     }
-	// }
-
 	Followers.propTypes = {
 	    model: _react.PropTypes.object.isRequired,
 	    dispatch: _react.PropTypes.func.isRequired
 	};
-
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	    return {
 	        model: {
@@ -26902,745 +27598,20 @@
 	})(Followers);
 
 /***/ },
-/* 240 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.updateTimelineAction = exports.getTimelineAction = undefined;
-
-	var _api = __webpack_require__(241);
-
-	var _constants = __webpack_require__(230);
-
-	var token = localStorage.accessToken;
-	var userId = localStorage.userId;
-
-	var getTimelineAction = exports.getTimelineAction = function getTimelineAction(_ref) {
-	    var url = _ref.url;
-	    return function (dispatch, getState) {
-
-	        dispatch({
-	            type: _constants.GET_TIMELINE_REQUEST,
-	            payload: {
-	                timelineLoaded: false
-	            }
-	        });
-
-	        (0, _api.getTimeline)({ url: url, token: token }).then(function (payload) {
-	            dispatch({
-	                type: _constants.GET_TIMELINE_RESPONSE,
-	                payload: {
-	                    timelineItems: payload.data,
-	                    pagination: payload.pagination,
-	                    timelineLoaded: true
-	                }
-	            });
-	        });
-	    };
-	};
-
-	var updateTimelineAction = exports.updateTimelineAction = function updateTimelineAction(_ref2) {
-	    var url = _ref2.url;
-	    return function (dispatch, getState) {
-
-	        (0, _api.getTimeline)({ url: url, token: token }).then(function (payload) {
-	            dispatch({
-	                type: _constants.UPDATE_TIMELINE_RESPONSE,
-	                payload: {
-	                    timelineItems: payload.data,
-	                    pagination: payload.pagination
-	                }
-	            });
-	        });
-	    };
-	};
-
-/***/ },
-/* 241 */
+/* 251 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var dataType = 'jsonp';
-
-	var getFollowers = exports.getFollowers = function getFollowers(_ref) {
-	    var url = _ref.url;
-	    var userId = _ref.userId;
-	    var type = _ref.type;
-	    var token = _ref.token;
-
-	    var defaultUrl = 'https://api.instagram.com/v1/users/' + userId + '/' + type + '?access_token=' + token;
-	    return $.ajax({ url: url || defaultUrl, dataType: dataType }).then(function (payload) {
-	        return {
-	            followers: payload.data,
-	            followersPagination: payload.pagination
-	        };
-	    });
-	};
-
-	var getRelationshipStatus = exports.getRelationshipStatus = function getRelationshipStatus(_ref2) {
-	    var follower = _ref2.follower;
-	    var callback = _ref2.callback;
-	    var id = _ref2.id;
-	    var token = _ref2.token;
-
-	    var url = 'https://api.instagram.com/v1/users/' + id + '/relationship?access_token=' + token;
-	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
-	        return {
-	            outgoingStatus: data.data.outgoing_status
-	        };
-	    });
-	};
-
-	var getProfileData = exports.getProfileData = function getProfileData(_ref3) {
-	    var userId = _ref3.userId;
-	    var token = _ref3.token;
-
-	    var url = 'https://api.instagram.com/v1/users/' + userId + '?access_token=' + token;
-	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
-	        if (payload.meta.code !== 200) {
-	            return {
-	                profile: {},
-	                counts: {},
-	                profileError: payload.meta.error_message
-	            };
-	        }
-
-	        return {
-	            profile: payload.data,
-	            counts: payload.data.counts,
-	            profileError: null
-	        };
-	    });
-	};
-
-	var getProfilePhotos = exports.getProfilePhotos = function getProfilePhotos(_ref4) {
-	    var url = _ref4.url;
-	    var userId = _ref4.userId;
-	    var token = _ref4.token;
-
-	    var defaultUrl = 'https://api.instagram.com/v1/users/' + userId + '/media/recent?access_token=' + token;
-
-	    return $.ajax({ url: url || defaultUrl, dataType: dataType }).then(function (payload) {
-	        if (payload.meta.code !== 200) {
-	            return {
-	                profilePhotos: [],
-	                profilePagination: {},
-	                profileError: payload.meta.error_message
-	            };
-	        }
-
-	        return {
-	            profilePhotos: payload.data,
-	            profilePagination: payload.pagination,
-	            profileError: null
-	        };
-	    });
-	};
-
-	var searchByTag = exports.searchByTag = function searchByTag(_ref5) {
-	    var tag = _ref5.tag;
-	    var token = _ref5.token;
-
-	    var url = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent?&access_token=' + token;
-
-	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
-	        if (payload.meta.code !== 200) {
-	            return {
-	                deniedTag: true
-	            };
-	        }
-
-	        return {
-	            foundedPhotos: payload.data,
-	            searchPagination: payload.pagination,
-	            deniedTag: false
-	        };
-	    });
-	};
-
-	var getPopular = exports.getPopular = function getPopular(_ref6) {
-	    var token = _ref6.token;
-
-	    var url = 'https://api.instagram.com/v1/media/popular/?access_token=' + token;
-	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
-	        return {
-	            foundedPhotos: payload.data
-	        };
-	    });
-	};
-
-	var searchByUser = exports.searchByUser = function searchByUser(_ref7) {
-	    var username = _ref7.username;
-	    var token = _ref7.token;
-
-	    var url = 'https://api.instagram.com/v1/users/search?q=' + username + '&access_token=' + token;
-
-	    return $.ajax({ url: url, dataType: dataType }).then(function (payload) {
-	        return {
-	            foundedUsers: payload.data
-	        };
-	    });
-	};
-
-	var getTimeline = exports.getTimeline = function getTimeline(_ref8) {
-	    var url = _ref8.url;
-	    var token = _ref8.token;
-
-	    var timelineUrl = 'https://api.instagram.com/v1/users/self/feed?access_token=' + token;
-	    return $.ajax({ url: url || timelineUrl, dataType: dataType });
-	};
-
-/***/ },
-/* 242 */,
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.profileError = exports.profilePagination = exports.profilePhotos = exports.profileLoaded = exports.counts = exports.profile = undefined;
-
-	var _constants = __webpack_require__(230);
-
-	var initialState = {
-	    profile: {},
-	    counts: {},
-	    profileLoaded: false,
-	    profilePhotos: [],
-	    profilePagination: {},
-	    profileError: null
-	};
-
-	var profile = exports.profile = function profile() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profile : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.GET_PROFILE_RESPONSE:
-	            return action.payload.profile || {};
-	        case _constants.GET_PROFILE_REQUEST:
-	        default:
-	            return state;
-	    }
-	};
-
-	var counts = exports.counts = function counts() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.counts : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.GET_PROFILE_RESPONSE:
-	            return action.payload.counts;
-	        case _constants.GET_PROFILE_REQUEST:
-	        default:
-	            return state;
-	    }
-	};
-
-	var profileLoaded = exports.profileLoaded = function profileLoaded() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profileLoaded : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.GET_PROFILE_RESPONSE:
-	        case _constants.GET_PROFILE_REQUEST:
-	            return action.payload.profileLoaded;
-	        default:
-	            return state;
-	    }
-	};
-
-	var profilePhotos = exports.profilePhotos = function profilePhotos() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profilePhotos : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.UPDATE_PROFILE_PHOTOS_RESPONSE:
-	            return state.concat(action.payload.profilePhotos);
-	        case _constants.GET_PROFILE_PHOTOS_RESPONSE:
-	            return action.payload.profilePhotos;
-	        case _constants.GET_PROFILE_PHOTOS_REQUEST:
-	            return initialState.profilePhotos;
-	        default:
-	            return state;
-	    }
-	};
-
-	var profilePagination = exports.profilePagination = function profilePagination() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profilePagination : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.GET_PROFILE_PHOTOS_RESPONSE:
-	        case _constants.UPDATE_PROFILE_PHOTOS_RESPONSE:
-	            return action.payload.profilePagination;
-	        case _constants.GET_PROFILE_PHOTOS_REQUEST:
-	        default:
-	            return state;
-	    }
-	};
-
-	var profileError = exports.profileError = function profileError() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.profileError : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.GET_PROFILE_PHOTOS_RESPONSE:
-	        case _constants.UPDATE_PROFILE_PHOTOS_RESPONSE:
-	            return action.payload.profileError;
-	        case _constants.GET_PROFILE_PHOTOS_REQUEST:
-	        default:
-	            return state;
-	    }
-	};
-
-/***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _timeline = __webpack_require__(240);
-
-	Object.defineProperty(exports, 'getTimelineAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _timeline.getTimelineAction;
-	  }
-	});
-	Object.defineProperty(exports, 'updateTimelineAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _timeline.updateTimelineAction;
-	  }
-	});
-
-	var _profile = __webpack_require__(245);
-
-	Object.defineProperty(exports, 'getProfileDataAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _profile.getProfileDataAction;
-	  }
-	});
-	Object.defineProperty(exports, 'getProfilePhotosAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _profile.getProfilePhotosAction;
-	  }
-	});
-	Object.defineProperty(exports, 'updateProfilePhotosAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _profile.updateProfilePhotosAction;
-	  }
-	});
-
-	var _searchByUser = __webpack_require__(246);
-
-	Object.defineProperty(exports, 'searchByUserAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _searchByUser.searchByUserAction;
-	  }
-	});
-
-	var _searchByTag = __webpack_require__(248);
-
-	Object.defineProperty(exports, 'searchByTagAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _searchByTag.searchByTagAction;
-	  }
-	});
-	Object.defineProperty(exports, 'getPopularAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _searchByTag.getPopularAction;
-	  }
-	});
-
-	var _followers = __webpack_require__(250);
-
-	Object.defineProperty(exports, 'getFollowersAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _followers.getFollowersAction;
-	  }
-	});
-	Object.defineProperty(exports, 'updateFollowersAction', {
-	  enumerable: true,
-	  get: function get() {
-	    return _followers.updateFollowersAction;
-	  }
-	});
-
-/***/ },
-/* 245 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.updateProfilePhotosAction = exports.getProfilePhotosAction = exports.getProfileDataAction = undefined;
-
-	var _api = __webpack_require__(241);
-
-	var _constants = __webpack_require__(230);
-
-	var token = localStorage.accessToken;
-
-	var getProfileDataAction = exports.getProfileDataAction = function getProfileDataAction(_ref) {
-	    var url = _ref.url;
-	    var userId = _ref.userId;
-	    return function (dispatch, getState) {
-	        dispatch({
-	            type: _constants.GET_PROFILE_REQUEST,
-	            payload: {
-	                profileLoaded: false,
-	                profileError: null
-	            }
-	        });
-
-	        (0, _api.getProfileData)({ userId: userId, token: token }).then(function (payload) {
-	            payload.profileLoaded = true;
-
-	            dispatch({
-	                type: _constants.GET_PROFILE_RESPONSE,
-	                payload: payload
-	            });
-	        });
-	    };
-	};
-
-	var getProfilePhotosAction = exports.getProfilePhotosAction = function getProfilePhotosAction(_ref2) {
-	    var url = _ref2.url;
-	    var userId = _ref2.userId;
-	    return function (dispatch, getState) {
-	        dispatch({
-	            type: _constants.GET_PROFILE_PHOTOS_REQUEST,
-	            profileError: null
-	        });
-
-	        (0, _api.getProfilePhotos)({ url: url, userId: userId, token: token }).then(function (payload) {
-	            dispatch({
-	                type: _constants.GET_PROFILE_PHOTOS_RESPONSE,
-	                payload: payload
-	            });
-	        });
-	    };
-	};
-
-	var updateProfilePhotosAction = exports.updateProfilePhotosAction = function updateProfilePhotosAction(_ref3) {
-	    var url = _ref3.url;
-	    var userId = _ref3.userId;
-	    return function (dispatch, getState) {
-	        dispatch({
-	            type: _constants.UPDATE_PROFILE_PHOTOS_REQUEST
-	        });
-
-	        (0, _api.getProfilePhotos)({ url: url, userId: userId, token: token }).then(function (payload) {
-	            dispatch({
-	                type: _constants.UPDATE_PROFILE_PHOTOS_RESPONSE,
-	                payload: payload
-	            });
-	        });
-	    };
-	};
-
-/***/ },
-/* 246 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.searchByUserAction = undefined;
-
-	var _api = __webpack_require__(241);
-
-	var _constants = __webpack_require__(230);
-
-	var token = localStorage.accessToken;
-
-	var searchByUserAction = exports.searchByUserAction = function searchByUserAction(username) {
-	    return function (dispatch, getState) {
-
-	        username = username.replace(/\s/, '');
-
-	        dispatch({
-	            type: _constants.SEARCH_BY_USER_REQUEST
-	        });
-
-	        (0, _api.searchByUser)({ username: username, token: token }).then(function (payload) {
-	            dispatch({
-	                type: _constants.SEARCH_BY_USER_RESPONSE,
-	                payload: payload
-	            });
-	        });
-	    };
-	};
-
-/***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.foundedUsers = undefined;
-
-	var _constants = __webpack_require__(230);
-
-	var foundedUsers = exports.foundedUsers = function foundedUsers() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.SEARCH_BY_USER_RESPONSE:
-	            return action.payload.foundedUsers;
-	        case _constants.SEARCH_BY_USER_REQUEST:
-	        default:
-	            return state;
-	    }
-	};
-
-/***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.getPopularAction = exports.searchByTagAction = undefined;
-
-	var _api = __webpack_require__(241);
-
-	var _constants = __webpack_require__(230);
-
-	var token = localStorage.accessToken;
-
-	var searchByTagAction = exports.searchByTagAction = function searchByTagAction(tag) {
-	    return function (dispatch, getState) {
-
-	        tag = tag.replace(/\s/, '');
-
-	        dispatch({
-	            type: _constants.SEARCH_BY_TAG_REQUEST
-	        });
-
-	        (0, _api.searchByTag)({ tag: tag, token: token }).then(function (payload) {
-	            dispatch({
-	                type: _constants.SEARCH_BY_TAG_RESPONSE,
-	                payload: payload
-	            });
-	        });
-	    };
-	};
-
-	var getPopularAction = exports.getPopularAction = function getPopularAction() {
-	    return function (dispatch, getState) {
-
-	        dispatch({
-	            type: _constants.GET_POPULAR_REQUEST
-	        });
-
-	        (0, _api.getPopular)({ token: token }).then(function (payload) {
-	            dispatch({
-	                type: _constants.GET_POPULAR_RESPONSE,
-	                payload: payload
-	            });
-	        });
-	    };
-	};
-
-/***/ },
-/* 249 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.deniedTag = exports.searchPagination = exports.foundedPhotos = undefined;
-
-	var _constants = __webpack_require__(230);
-
-	var initialState = {
-	    foundedPhotos: [],
-	    searchPagination: {},
-	    deniedTag: false
-	};
-
-	var foundedPhotos = exports.foundedPhotos = function foundedPhotos() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.foundedPhotos : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.SEARCH_BY_TAG_RESPONSE:
-	        case _constants.GET_POPULAR_RESPONSE:
-
-	            // If we try to find denied tag like: xxx, booty, etc
-	            // we will not get anything here
-	            // and we will simply return empty array
-	            return action.payload.foundedPhotos || [];
-	        case _constants.GET_POPULAR_REQUEST:
-	        case _constants.SEARCH_BY_TAG_REQUEST:
-	        default:
-	            return state;
-	    }
-	};
-
-	var searchPagination = exports.searchPagination = function searchPagination() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.searchPagination : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.SEARCH_BY_TAG_RESPONSE:
-
-	            // If we try to find denied tag like: xxx, booty, etc
-	            // we will not get anything here
-	            // and we will simply return empty array
-	            return action.payload.searchPagination || [];
-	        case _constants.SEARCH_BY_TAG_REQUEST:
-	        default:
-	            return state;
-	    }
-	};
-
-	var deniedTag = exports.deniedTag = function deniedTag() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState.deniedTag : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.SEARCH_BY_TAG_RESPONSE:
-	            return action.payload.deniedTag;
-	        case _constants.SEARCH_BY_TAG_REQUEST:
-	        default:
-	            return state;
-	    }
-	};
-
-/***/ },
-/* 250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.updateFollowersAction = exports.getFollowersAction = undefined;
-
-	var _api = __webpack_require__(241);
-
-	var _constants = __webpack_require__(230);
-
-	var token = localStorage.accessToken;
-
-	var getFollowersAction = exports.getFollowersAction = function getFollowersAction(_ref) {
-	    var url = _ref.url;
-	    var userId = _ref.userId;
-	    var type = _ref.type;
-	    return function (dispatch, getState) {
-	        dispatch({
-	            type: _constants.GET_FOLLOWERS_REQUEST,
-	            payload: {
-	                followers: [],
-	                followersPagination: {}
-	            }
-	        });
-
-	        (0, _api.getFollowers)({ url: url, userId: userId, type: type, token: token }).then(function (payload) {
-	            dispatch({
-	                type: _constants.GET_FOLLOWERS_RESPONSE,
-	                payload: payload
-	            });
-	        });
-	    };
-	};
-
-	var updateFollowersAction = exports.updateFollowersAction = function updateFollowersAction(_ref2) {
-	    var url = _ref2.url;
-	    var userId = _ref2.userId;
-	    var type = _ref2.type;
-	    return function (dispatch, getState) {
-	        dispatch({
-	            type: _constants.UPDATE_FOLLOWERS_REQUEST
-	        });
-
-	        (0, _api.getFollowers)({ url: url, userId: userId, type: type, token: token }).then(function (payload) {
-	            dispatch({
-	                type: _constants.UPDATE_FOLLOWERS_RESPONSE,
-	                payload: payload
-	            });
-	        });
-	    };
-	};
-
-/***/ },
-/* 251 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.followersPagination = exports.followers = undefined;
-
-	var _constants = __webpack_require__(230);
-
-	var followers = exports.followers = function followers() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.GET_FOLLOWERS_REQUEST:
-	        case _constants.GET_FOLLOWERS_RESPONSE:
-	            return action.payload.followers;
-	        case _constants.UPDATE_FOLLOWERS_RESPONSE:
-	            return action.payload.followers.concat(action.payload.followers);
-	        default:
-	            return state;
-	    }
-	};
-
-	var followersPagination = exports.followersPagination = function followersPagination() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var action = arguments[1];
-
-	    switch (action.type) {
-	        case _constants.GET_FOLLOWERS_REQUEST:
-	        case _constants.GET_FOLLOWERS_RESPONSE:
-	        case _constants.UPDATE_FOLLOWERS_RESPONSE:
-	            return action.payload.followersPagination;
-	        default:
-	            return state;
-	    }
+	var PageNotFound = exports.PageNotFound = function PageNotFound() {
+	    return React.createElement(
+	        "div",
+	        null,
+	        "Page not found"
+	    );
 	};
 
 /***/ }

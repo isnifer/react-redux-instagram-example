@@ -11,6 +11,7 @@ import SearchPhotos from './SearchPhotos';
 import SearchUsers from './SearchUsers';
 import Profile from './Profile';
 import Followers from './Followers';
+import PageNotFound from './PageNotFound';
 
 import getTimelineAction from '../app/actions/timeline';
 
@@ -28,6 +29,7 @@ render((
                 <Route path="profile/:id" name="Profile" component={Profile} />
                 <Route path="followed-by/:id" name="followed-by" component={Followers} />
                 <Route path="follows/:id" name="follows" component={Followers} />
+                <Route path="*" name="not-found" component={PageNotFound} />
             </Route>
         </Router>
     </Provider>

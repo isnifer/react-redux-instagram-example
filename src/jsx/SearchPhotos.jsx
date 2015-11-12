@@ -6,6 +6,11 @@ import { searchByTagAction, getPopularAction } from '../app/actions';
 
 class SearchPhotos extends Component {
 
+    static propTypes = {
+        model: PropTypes.object.isRequired,
+        dispatch: PropTypes.func.isRequired
+    }
+
     search (event) {
         event.preventDefault();
 
@@ -67,11 +72,6 @@ class SearchPhotos extends Component {
             </div>
         );
     }
-}
-
-SearchPhotos.propTypes = {
-    model: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
 }
 
 export default connect(state => ({

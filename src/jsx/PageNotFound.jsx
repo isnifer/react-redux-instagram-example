@@ -1,4 +1,4 @@
-return function PageNotFound (React) => () => {
+export const PageNotFound = () => {
     return (
         <div>Page not found</div>
     );
