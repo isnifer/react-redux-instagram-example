@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 // Actions
-import { searchByUserAction } from '../app/actions';
+import { searchByUserAction } from '../actions';
 
 class SearchUsers extends Component {
 

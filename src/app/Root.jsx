@@ -2,21 +2,16 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import { Router, Route, IndexRoute, Link } from 'react-router';
 import { Provider } from 'react-redux';
-import store from '../app/store';
+import store from './store';
 
 // Page handlers
-import App from './App';
-import Timeline from './Timeline';
-import SearchPhotos from './SearchPhotos';
-import SearchUsers from './SearchUsers';
-import Profile from './Profile';
-import Followers from './Followers';
-import PageNotFound from './PageNotFound';
-
-import getTimelineAction from '../app/actions/timeline';
-
-const token = localStorage.accessToken;
-const userId = localStorage.userId;
+import App from './handlers/App';
+import Timeline from './handlers/Timeline';
+import SearchPhotos from './handlers/SearchPhotos';
+import SearchUsers from './handlers/SearchUsers';
+import Profile from './handlers/Profile';
+import Followers from './handlers/Followers';
+import PageNotFound from './handlers/PageNotFound';
 
 render((
     <Provider store={store}>

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 // Actions
-import { searchByTagAction, getPopularAction } from '../app/actions';
+import { searchByTagAction, getPopularAction } from '../actions';
 
 class SearchPhotos extends Component {
 

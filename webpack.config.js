@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
-    entry: './src/jsx/instagram.jsx',
+    entry: './src/app/Root.jsx',
     output: {
         publicPath: "/",
         filename: 'bundle.js'

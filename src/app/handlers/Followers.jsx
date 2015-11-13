@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { loadOnScrollBottom } from '../helpers';
+import { loadOnScrollBottom } from '../../helpers';
 
 // Actions
-import { getFollowersAction, updateFollowersAction } from '../app/actions';
+import { getFollowersAction, updateFollowersAction } from '../actions';
 
 class Followers extends Component {
 

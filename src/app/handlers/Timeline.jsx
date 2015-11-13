@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { loadOnScrollBottom } from '../helpers';
+import { loadOnScrollBottom } from '../../helpers';
 
 // Actions
-import { getTimelineAction, updateTimelineAction } from '../app/actions';
+import { getTimelineAction, updateTimelineAction } from '../actions';
 
 const token = localStorage.accessToken;
 const userId = localStorage.userId;
