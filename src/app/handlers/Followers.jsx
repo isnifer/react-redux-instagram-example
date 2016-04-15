@@ -7,18 +7,11 @@ import { loadOnScrollBottom } from '../../helpers';
 import { getFollowersAction, updateFollowersAction } from '../actions';
 
 class Followers extends Component {
-
-    static propTypes = {
-        model: PropTypes.object.isRequired,
-        dispatch: PropTypes.func.isRequired
-    }
-
     componentDidMount () {
         const userId = this.props.params.id;
         const type = this.props.route.name;
-        const { dispatch } = this.props;
 
-        dispatch(getFollowersAction({userId, type}));
+        this.props.getFollowersAction({userId, type});
     }
 
     render () {
@@ -46,9 +39,13 @@ class Followers extends Component {
     }
 }
 
+Followers.propTypes = {
+    model: PropTypes.object.isRequired,
+};
+
 export default connect(state => ({
     model: {
         followers: state.followers,
         pagination: state.followersPagination
     }
-}))(Followers);
+}), {getFollowersAction, updateFollowersAction})(Followers);
